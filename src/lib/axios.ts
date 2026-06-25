@@ -10,7 +10,7 @@ export const setAccessToken = (token: string | null): void => {
 export const getAccessToken = (): string | null => accessToken;
 
 export const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL as string,
+  baseURL: import.meta.env.VITE_BACKEND_URL as string,
   withCredentials: true, // envía la cookie httpOnly automáticamente en cada request
 });
 

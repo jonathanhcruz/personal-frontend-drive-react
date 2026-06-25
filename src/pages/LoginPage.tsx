@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { axiosInstance, setAccessToken } from '../lib/axios';
+import { setAccessToken } from '../lib/axios';
+import { login } from '../services/auth.service';
 
 const LoginPage = (): React.JSX.Element => {
   const navigate = useNavigate();
@@ -15,11 +16,8 @@ const LoginPage = (): React.JSX.Element => {
     setLoading(true);
 
     try {
-      const { data } = await axiosInstance.post<{ data: { accessToken: string } }>(
-        '/api/auth/login',
-        { email, password },
-      );
-      setAccessToken(data.data.accessToken);
+      const accessToken = await login({ email, password });
+      setAccessToken(accessToken);
       navigate('/drive', { replace: true });
     } catch {
       setError('Email o contraseña incorrectos');
