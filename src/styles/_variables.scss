@@ -1,0 +1,82 @@
+// ─── Background layers ───────────────────────────────────────────────────────
+$bg-base:       #0d1117;
+$bg-surface:    #161b22;
+$bg-elevated:   #1c2128;
+$bg-overlay:    #21262d;
+
+// ─── Accent ──────────────────────────────────────────────────────────────────
+$accent:        #00e5cc;
+$accent-hover:  #00c9b3;
+$accent-muted:  rgba(0, 229, 204, 0.12);
+
+// ─── Text ────────────────────────────────────────────────────────────────────
+$text-primary:   #e6edf3;
+$text-secondary: #8b949e;
+$text-muted:     #484f58;
+
+// ─── Borders ─────────────────────────────────────────────────────────────────
+$border:        #30363d;
+$border-subtle: #21262d;
+
+// ─── Status ──────────────────────────────────────────────────────────────────
+$danger:        #f85149;
+$danger-muted:  rgba(248, 81, 73, 0.12);
+$warning:       #d29922;
+$success:       #3fb950;
+
+// ─── File type badge colors ───────────────────────────────────────────────────
+$badge-pdf:     #e05d5d;
+$badge-fig:     #8b5cf6;
+$badge-mp4:     #3b82f6;
+$badge-jpg:     #0ea5e9;
+$badge-png:     #06b6d4;
+$badge-gif:     #ec4899;
+$badge-zip:     #d97706;
+$badge-docx:    #2563eb;
+$badge-xlsx:    #16a34a;
+$badge-pptx:    #ea580c;
+$badge-md:      #6b7280;
+$badge-txt:     #6b7280;
+$badge-default: #4b5563;
+
+// ─── Sidebar ─────────────────────────────────────────────────────────────────
+$sidebar-width: 220px;
+
+// ─── Spacing ─────────────────────────────────────────────────────────────────
+$space-1: 4px;
+$space-2: 8px;
+$space-3: 12px;
+$space-4: 16px;
+$space-5: 20px;
+$space-6: 24px;
+$space-8: 32px;
+
+// ─── Border radius ───────────────────────────────────────────────────────────
+$radius-sm: 6px;
+$radius-md: 10px;
+$radius-lg: 14px;
+$radius-xl: 20px;
+$radius-full: 9999px;
+
+// ─── Typography ──────────────────────────────────────────────────────────────
+$font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+$font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+$text-xs:   11px;
+$text-sm:   13px;
+$text-base: 14px;
+$text-md:   16px;
+$text-lg:   20px;
+$text-xl:   24px;
+$text-2xl:  32px;
+
+// ─── Transitions ─────────────────────────────────────────────────────────────
+$transition-fast:   100ms ease;
+$transition-normal: 200ms ease;
+$transition-slow:   350ms ease;
+
+// ─── Z-index ─────────────────────────────────────────────────────────────────
+$z-dropdown:  100;
+$z-modal:     200;
+$z-toast:     300;
+$z-overlay:   400;

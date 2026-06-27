@@ -1,0 +1,52 @@
+@use './variables' as *;
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@mixin card {
+  background-color: $bg-surface;
+  border: 1px solid $border-subtle;
+  border-radius: $radius-md;
+  transition: border-color $transition-fast, background-color $transition-fast;
+
+  &:hover {
+    background-color: $bg-elevated;
+    border-color: $border;
+  }
+}
+
+@mixin badge-color($color) {
+  background-color: rgba($color, 0.15);
+  color: $color;
+}
+
+@mixin focus-ring {
+  &:focus-visible {
+    outline: 2px solid $accent;
+    outline-offset: 2px;
+    border-radius: $radius-sm;
+  }
+}
+
+@mixin overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+  z-index: $z-overlay;
+}
