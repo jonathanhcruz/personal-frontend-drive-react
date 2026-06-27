@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { setAccessToken } from '../lib/axios';
 import { refresh } from '../services/auth.service';
+import { Spinner } from '../components/Spinner';
 
 type AuthStatus = 'checking' | 'authenticated' | 'unauthenticated';
 
@@ -20,7 +21,7 @@ const ProtectedRoute = (): React.JSX.Element => {
       });
   }, []);
 
-  if (status === 'checking') return <div>Cargando...</div>;
+  if (status === 'checking') return <Spinner size="lg" />;
   if (status === 'unauthenticated') return <Navigate to="/login" replace />;
 
   return <Outlet />;

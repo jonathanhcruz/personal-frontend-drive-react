@@ -22,13 +22,16 @@ axiosInstance.interceptors.request.use((config) => {
   return config;
 });
 
+const SKIP_REFRESH_URLS = ['/api/auth/login', '/api/auth/refresh'];
+
 // En 401: intenta refresh (cookie se envía sola, sin body) → reintenta el request original
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const original = error.config;
+    const isAuthEndpoint = SKIP_REFRESH_URLS.some((url) => original?.url?.includes(url));
 
-    if (error.response?.status === 401 && !original._retry) {
+    if (error.response?.status === 401 && !original._retry && !isAuthEndpoint) {
       original._retry = true;
 
       try {

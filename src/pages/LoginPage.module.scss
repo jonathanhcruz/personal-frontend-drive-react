@@ -1,0 +1,58 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.login-page {
+  @include flex-center;
+  min-height: 100%;
+  padding: $space-6;
+  padding-bottom: $space-8;
+
+  &__card {
+    width: 100%;
+    max-width: 380px;
+    background-color: $bg-surface;
+    border: 1px solid $border-subtle;
+    border-radius: $radius-md;
+    padding: $space-8;
+    display: flex;
+    flex-direction: column;
+    gap: $space-6;
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $space-2;
+  }
+
+  &__title {
+    font-size: $text-xl;
+    font-weight: 700;
+    color: $text-primary;
+    letter-spacing: -0.02em;
+  }
+
+  &__subtitle {
+    font-size: $text-sm;
+    color: $text-secondary;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: $space-4;
+  }
+
+  &__fields {
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+  }
+
+  &__error {
+    font-size: $text-sm;
+    color: $danger;
+    text-align: center;
+  }
+}
