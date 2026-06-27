@@ -1,0 +1,100 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.text-input {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  padding: 0 $space-3;
+  background-color: $bg-elevated;
+  border: 1px solid $border;
+  border-radius: $radius-sm;
+  transition:
+    border-color $transition-fast,
+    background-color $transition-fast;
+
+  &:focus-within {
+    border-color: $accent;
+    background-color: $bg-surface;
+  }
+
+  &__icon-start,
+  &__icon-end,
+  &__toggle {
+    @include flex-center;
+    flex-shrink: 0;
+    line-height: 0;
+    color: $text-secondary;
+  }
+
+  &__toggle {
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $text-primary;
+    }
+  }
+
+  &__field {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 0;
+    color: $text-primary;
+    font-family: $font-sans;
+    font-size: $text-base;
+
+    &::placeholder {
+      color: $text-muted;
+    }
+  }
+
+  // Sizes
+  &--sm {
+    height: 28px;
+  }
+
+  &--sm &__field {
+    font-size: $text-sm;
+  }
+
+  &--md {
+    height: 36px;
+  }
+
+  &--lg {
+    height: 44px;
+  }
+
+  &--lg &__field {
+    font-size: $text-md;
+  }
+
+  // Modifiers
+  &--error {
+    border-color: $danger;
+
+    &:focus-within {
+      border-color: $danger;
+    }
+  }
+
+  &--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &--disabled &__field {
+    cursor: not-allowed;
+  }
+
+  &--full-width {
+    width: 100%;
+  }
+}
