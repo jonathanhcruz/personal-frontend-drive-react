@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { setAccessToken } from '../lib/axios';
 import { login } from '../services/auth.service';
 
+//componetes
+import { Button } from '../components/Button'
+
 const LoginPage = (): React.JSX.Element => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
@@ -45,9 +48,7 @@ const LoginPage = (): React.JSX.Element => {
           required
         />
         {error && <p>{error}</p>}
-        <button type="submit" disabled={loading}>
-          {loading ? 'Entrando...' : 'Entrar'}
-        </button>
+        <Button type="submit" disabled={loading} label={loading ? 'Entrando...' : 'Entrar'}/>
       </form>
     </div>
   );
