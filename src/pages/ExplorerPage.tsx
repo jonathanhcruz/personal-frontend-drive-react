@@ -1,24 +1,25 @@
-import { axiosInstance, setAccessToken } from '../lib/axios';
-import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useFolders } from '../hooks/useFolders';
+import { useAuth } from '../hooks/useAuth';
 
 const ExplorerPage = (): React.JSX.Element => {
-  const navigate = useNavigate();
+  const { folderId } = useParams<{ folderId?: string }>();
+  const { logout } = useAuth();
+  const { currentFolder, subfolders, files, breadcrumb, isLoading, error } = useFolders(folderId);
 
-  const handleLogout = async (): Promise<void> => {
-    try {
-      await axiosInstance.post('/api/auth/logout');
-    } finally {
-      setAccessToken(null);
-      navigate('/login', { replace: true });
-    }
-  };
+  if (isLoading) return <p>Cargando...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
   return (
-    <div>
-      <h1>Explorador</h1>
-      <button type="button" onClick={handleLogout}>
-        Cerrar sesión
-      </button>
+    <div style={{ padding: '2rem', fontFamily: 'monospace', color: 'white', background: '#0d1117', minHeight: '100vh' }}>
+      <button type="button" onClick={() => logout()}>Cerrar sesión</button>
+      <hr />
+      <p><strong>Breadcrumb:</strong> {breadcrumb.map(b => b.name).join(' › ') || 'Raíz'}</p>
+      <p><strong>Carpeta actual:</strong> {currentFolder?.name ?? 'Raíz'}</p>
+      <h3>Subcarpetas ({subfolders.length})</h3>
+      <ul>{subfolders.map(f => <li key={f.id}>{f.name}</li>)}</ul>
+      <h3>Archivos ({files.length})</h3>
+      <ul>{files.map(f => <li key={f.id}>{f.name}</li>)}</ul>
     </div>
   );
 };
