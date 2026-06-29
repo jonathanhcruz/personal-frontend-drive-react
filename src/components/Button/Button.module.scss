@@ -13,6 +13,7 @@
     background-color $transition-fast,
     color $transition-fast,
     border-color $transition-fast,
+    box-shadow $transition-fast,
     opacity $transition-fast;
 
   &:disabled {
@@ -35,9 +36,11 @@
   &--primary {
     background-color: $accent;
     color: $bg-base;
+    box-shadow: 0 0 8px rgba($accent, 0.35), 0 0 20px rgba($accent, 0.12);
 
     &:hover:not(:disabled) {
       background-color: $accent-hover;
+      box-shadow: 0 0 12px rgba($accent, 0.5), 0 0 28px rgba($accent, 0.18);
     }
   }
 

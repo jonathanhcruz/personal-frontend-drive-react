@@ -1,0 +1,61 @@
+@use '../../styles/variables' as *;
+
+.logo {
+  --orbit-size: 54px;
+  --orbit-inner-inset: 7px;
+  --orbit-inner-glow: #{rgba($accent, 0.4)};
+  --dot-size: 8px;
+  --dot-top: -2px;
+  --dot-glow: 14px;
+
+  position: relative;
+  width: var(--orbit-size);
+  height: var(--orbit-size);
+  flex-shrink: 0;
+
+  &--sm {
+    --orbit-size: 30px;
+    --orbit-inner-inset: 3px;
+    --orbit-inner-glow: transparent;
+    --dot-size: 5px;
+    --dot-top: -1px;
+    --dot-glow: 8px;
+  }
+
+  &--lg {
+    --orbit-size: 70px;
+    --orbit-inner-inset: 10px;
+    --dot-size: 11px;
+    --dot-top: -3px;
+    --dot-glow: 18px;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1.5px solid $border;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: var(--orbit-inner-inset);
+    border-radius: 50%;
+    border: 1.5px solid $accent;
+    box-shadow: 0 0 18px var(--orbit-inner-glow);
+  }
+
+  &__dot {
+    position: absolute;
+    top: var(--dot-top);
+    left: 50%;
+    transform: translateX(-50%);
+    width: var(--dot-size);
+    height: var(--dot-size);
+    border-radius: 50%;
+    background: $accent;
+    box-shadow: 0 0 var(--dot-glow) $accent;
+  }
+}

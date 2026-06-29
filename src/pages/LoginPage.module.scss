@@ -3,39 +3,69 @@
 
 .login-page {
   @include flex-center;
+  flex-direction: column;
+  gap: $space-8;
   min-height: 100%;
   padding: $space-6;
-  padding-bottom: $space-8;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(900px 600px at 50% -10%, rgba($accent, 0.1), transparent 55%),
+    $bg-base;
 
-  &__card {
-    width: 100%;
-    max-width: 380px;
-    background-color: $bg-surface;
-    border: 1px solid $border-subtle;
-    border-radius: $radius-md;
-    padding: $space-8;
-    display: flex;
-    flex-direction: column;
-    gap: $space-6;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 54px 54px;
+    mask-image: radial-gradient(700px 600px at 50% 30%, #000, transparent 75%);
+    pointer-events: none;
   }
 
-  &__header {
+  &__brand {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: $space-2;
+    gap: $space-4;
+  }
+
+  &__brand-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $space-1;
   }
 
   &__title {
-    font-size: $text-xl;
     font-weight: 700;
+    font-size: $text-xl;
+    letter-spacing: 0.14em;
     color: $text-primary;
-    letter-spacing: -0.02em;
+    line-height: 1;
   }
 
-  &__subtitle {
-    font-size: $text-sm;
-    color: $text-secondary;
+  &__tagline {
+    font-family: $font-mono;
+    font-size: $text-xs;
+    letter-spacing: 0.1em;
+    color: $text-muted;
+  }
+
+  &__card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 404px;
+    background-color: $bg-surface;
+    border: 1px solid $border-subtle;
+    border-radius: $radius-lg;
+    padding: $space-8;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
   }
 
   &__form {
@@ -50,9 +80,50 @@
     gap: $space-3;
   }
 
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+  }
+
+  &__label {
+    font-family: $font-mono;
+    font-size: $text-xs;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: $text-secondary;
+  }
+
   &__error {
     font-size: $text-sm;
     color: $danger;
     text-align: center;
+  }
+
+  &__forgot {
+    font-size: $text-sm;
+    color: $text-muted;
+    text-align: center;
+  }
+
+  &__forgot-link {
+    color: $text-secondary;
+    text-decoration: underline;
+    cursor: pointer;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $text-primary;
+    }
+  }
+
+  &__footer {
+    position: relative;
+    z-index: 1;
+    font-family: $font-mono;
+    font-size: $text-xs;
+    letter-spacing: 0.08em;
+    color: $text-muted;
+    opacity: 0.4;
   }
 }
