@@ -2,6 +2,7 @@ import { HiFolderAdd } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../Button';
 import { FolderItem } from '../FolderItem';
+import { FileItem } from '../FileItem';
 import styles from './DriveContent.module.scss';
 import type { DriveContentProps } from './DriveContent.types';
 
@@ -65,9 +66,11 @@ export const DriveContent = ({
               .join(' ')}
           >
             {files.map((file) => (
-              <div key={file.id} className={styles['drive-content__placeholder']}>
-                {file.name}
-              </div>
+              <FileItem
+                key={file.id}
+                file={file}
+                onOptions={(_id) => {}}
+              />
             ))}
           </div>
         </section>

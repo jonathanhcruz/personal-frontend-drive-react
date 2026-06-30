@@ -31,36 +31,35 @@ _Última actualización: 2026-06-29_
 - `src/components/Spinner` — `<span role="status">` · tamaños sm/md/lg
 - `src/components/Logo` — solo la órbita · tamaños sm/md/lg via CSS custom properties
 
+### Dashboard — shell
+- `src/components/Sidebar` — Logo sm + brand PRIVATE/DRIVE + NavLinks + barra de almacenamiento (hardcoded); NAV_ITEMS en `Sidebar/constants/index.ts`
+- `src/components/DriveTopbar` — breadcrumb `›` + search disabled + toggle grid/list + botón Subir + avatar JL
+- `src/components/DriveContent` — heading con título/meta + "Nueva carpeta" + sección CARPETAS + sección ARCHIVOS + estado vacío
+
+### Componentes de contenido
+- `src/components/FolderItem` — icono HiFolder (accent) + nombre truncado + botón HiDotsVertical (hover)
+- `src/components/FileItem` — badge coloreado por extensión (constants) + nombre truncado + tamaño + fecha + botón HiDotsVertical (hover)
+
 ### Páginas
-- `src/pages/LoginPage.tsx` + `LoginPage.module.scss` — diseño completo según PDF
-
----
-
-## En progreso 🔨
-
-### Esqueleto del dashboard (plan por fases)
-Ver [dashboard-plan.md](./dashboard-plan.md)
+- `src/pages/LoginPage/index.tsx` — diseño completo según PDF
+- `src/pages/ExplorerPage/index.tsx` — ensambla Sidebar + DriveTopbar + DriveContent; conectado a `useFolders` + `useFiles`
 
 ---
 
 ## Pendiente ⏳
 
 ### Componentes globales
-- `Badge` — pospuesto, se evalúa al construir FileItem/MetadataPanel
 - `Modal` — para crear carpeta, renombrar, confirmar eliminación
-- `Breadcrumb`
-- `ContextMenu`
+- `ContextMenu` — menú opciones para FolderItem/FileItem (dispara `onOptions`)
 
-### Componentes de contenido (dentro del dashboard)
-- `FolderItem`
-- `FolderGrid`
-- `FileItem`
-- `UploadPanel`
-- `SharePanel`
-- `MetadataPanel`
+### Paneles del dashboard
+- `UploadPanel` — overlay "Subiendo 2 archivos..." con progreso
+- `SharePanel` — gestión de enlaces compartidos (usa `useShare`)
+- `MetadataPanel` — panel de metadatos de archivo/carpeta
 
-### Páginas
-- `ExplorerPage.tsx` — tiene smoke test temporal; pendiente diseño real
+### Callbacks pendientes de conectar
+- `onOptions` en FolderItem/FileItem → esperando `ContextMenu`
+- `onNewFolder` en DriveContent → esperando `Modal`
 
 ---
 

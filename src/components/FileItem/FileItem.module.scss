@@ -1,0 +1,79 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.file-item {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+  padding: $space-3;
+  background-color: $bg-elevated;
+  border: 1px solid $border-subtle;
+  border-radius: $radius-md;
+  cursor: pointer;
+  transition: background-color $transition-fast, border-color $transition-fast;
+
+  &:hover {
+    background-color: $bg-overlay;
+    border-color: $border;
+
+    .file-item__menu-btn {
+      opacity: 1;
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: $radius-sm;
+    font-family: $font-mono;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #fff;
+  }
+
+  &__menu-btn {
+    @include flex-center;
+    width: 24px;
+    height: 24px;
+    border-radius: $radius-sm;
+    color: $text-muted;
+    font-size: 16px;
+    flex-shrink: 0;
+    opacity: 0;
+    transition: opacity $transition-fast, background-color $transition-fast, color $transition-fast;
+
+    &:hover {
+      background-color: $bg-base;
+      color: $text-primary;
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+    min-width: 0;
+  }
+
+  &__name {
+    font-size: $text-sm;
+    font-weight: 500;
+    color: $text-primary;
+    @include truncate;
+  }
+
+  &__meta {
+    font-size: $text-xs;
+    color: $text-muted;
+  }
+}

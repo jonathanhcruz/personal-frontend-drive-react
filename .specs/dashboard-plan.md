@@ -1,30 +1,23 @@
-# Plan: Esqueleto del Dashboard
+# Plan: Dashboard
 
 ## Estructura de carpetas
-Los componentes del dashboard son específicos de la página explorer — van colocados junto a ella:
 
 ```
 src/
+  components/
+    Sidebar/          ✅  constants/index.ts (NAV_ITEMS)
+    DriveTopbar/      ✅
+    DriveContent/     ✅
+    FolderItem/       ✅  constants/index.ts (futuro)
+    FileItem/         ✅  constants/index.ts (EXTENSION_COLORS)
+    Modal/            ⏳
+    ContextMenu/      ⏳
+    UploadPanel/      ⏳
+    SharePanel/       ⏳
+    MetadataPanel/    ⏳
   pages/
-    explorer/
-      components/
-        Sidebar/
-          Sidebar.tsx
-          Sidebar.module.scss
-          Sidebar.types.ts
-          index.ts
-        DriveTopbar/
-          DriveTopbar.tsx
-          DriveTopbar.module.scss
-          DriveTopbar.types.ts
-          index.ts
-        DriveContent/
-          DriveContent.tsx
-          DriveContent.module.scss
-          DriveContent.types.ts
-          index.ts
-      ExplorerPage.tsx
-      ExplorerPage.module.scss
+    LoginPage/        ✅  index.tsx
+    ExplorerPage/     ✅  index.tsx
 ```
 
 ## Layout general
@@ -57,7 +50,7 @@ src/
 
 ---
 
-## Fase 1 — `Sidebar` ⏳
+## Fase 1 — `Sidebar` ✅
 
 **Responsabilidad:** columna izquierda fija. No recibe props de data — autónomo.
 
@@ -72,7 +65,7 @@ src/
 
 ---
 
-## Fase 2 — `DriveTopbar` ⏳
+## Fase 2 — `DriveTopbar` ✅
 
 **Responsabilidad:** barra superior del área principal.
 
@@ -97,7 +90,7 @@ interface DriveTopbarProps {
 
 ---
 
-## Fase 3 — `DriveContent` ⏳
+## Fase 3 — `DriveContent` ✅
 
 **Responsabilidad:** área de contenido scrolleable.
 
@@ -123,7 +116,7 @@ interface DriveContentProps {
 
 ---
 
-## Fase 4 — `ExplorerPage` ensamblaje ⏳
+## Fase 4 — `ExplorerPage` ensamblaje ✅
 
 **Responsabilidad:** shell de dos columnas, owns el estado.
 
@@ -149,10 +142,9 @@ interface DriveContentProps {
 
 ---
 
-## Siguientes pasos (después del esqueleto)
-1. `Modal` — para crear carpeta, renombrar, confirmar eliminación
-2. `FolderItem` + `FolderGrid` — reemplaza placeholders en DriveContent
-3. `FileItem` — reemplaza placeholders en DriveContent
-4. `UploadPanel` — reemplaza trigger de onUpload
-5. `SharePanel` + `MetadataPanel`
-6. `ContextMenu` — click derecho en FolderItem/FileItem
+## Siguientes pasos
+1. `Modal` ⏳ — crear carpeta, renombrar, confirmar eliminación → conecta `onNewFolder` en DriveContent
+2. `ContextMenu` ⏳ — menú opciones en FolderItem/FileItem → conecta `onOptions`
+3. `UploadPanel` ⏳ — overlay progreso de subida
+4. `SharePanel` ⏳ — gestión de enlaces (usa `useShare`)
+5. `MetadataPanel` ⏳ — metadatos de archivo/carpeta
