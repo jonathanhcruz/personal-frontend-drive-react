@@ -1,0 +1,86 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.drive-content {
+  display: flex;
+  flex-direction: column;
+  gap: $space-6;
+  flex: 1;
+  padding: $space-6;
+  overflow-y: auto;
+
+  &__heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: $space-4;
+  }
+
+  &__heading-info {
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+  }
+
+  &__title {
+    font-size: $text-xl;
+    font-weight: 600;
+    color: $text-primary;
+    line-height: 1.2;
+  }
+
+  &__meta {
+    font-size: $text-sm;
+    color: $text-muted;
+  }
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+  }
+
+  &__section-label {
+    font-family: $font-mono;
+    font-size: $text-xs;
+    letter-spacing: 0.12em;
+    color: $text-muted;
+  }
+
+  &__folder-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: $space-3;
+  }
+
+  &__file-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: $space-3;
+
+    &--list {
+      grid-template-columns: 1fr;
+      gap: $space-2;
+    }
+  }
+
+  &__placeholder {
+    padding: $space-4;
+    background-color: $bg-elevated;
+    border: 1px solid $border-subtle;
+    border-radius: $radius-md;
+    font-size: $text-sm;
+    color: $text-secondary;
+  }
+
+  &__empty {
+    @include flex-center;
+    flex: 1;
+    min-height: 200px;
+  }
+
+  &__empty-text {
+    font-size: $text-sm;
+    color: $text-muted;
+  }
+}

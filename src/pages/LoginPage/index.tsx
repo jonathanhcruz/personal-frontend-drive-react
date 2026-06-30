@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { HiMail, HiLockClosed } from 'react-icons/hi';
-import { Button } from '../components/Button';
-import { Logo } from '../components/Logo';
-import { TextInput } from '../components/Input';
-import { useAuth } from '../hooks/useAuth';
+import { Button } from '../../components/Button';
+import { Logo } from '../../components/Logo';
+import { TextInput } from '../../components/Input';
+import { useAuth } from '../../hooks/useAuth';
 import styles from './LoginPage.module.scss';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

@@ -1,0 +1,126 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.drive-topbar {
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+  height: 56px;
+  min-height: 56px;
+  padding: 0 $space-6;
+  background-color: $bg-surface;
+  border-bottom: 1px solid $border-subtle;
+
+  &__breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+    flex-shrink: 0;
+  }
+
+  &__breadcrumb-segment {
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+  }
+
+  &__breadcrumb-sep {
+    color: $text-muted;
+    font-size: 14px;
+  }
+
+  &__breadcrumb-item {
+    font-size: $text-sm;
+    color: $text-secondary;
+
+    &:last-child {
+      color: $text-primary;
+      font-weight: 500;
+    }
+  }
+
+  &__search {
+    position: relative;
+    flex: 1;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  &__search-icon {
+    position: absolute;
+    left: $space-3;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $text-muted;
+    font-size: 15px;
+    pointer-events: none;
+  }
+
+  &__search-input {
+    width: 100%;
+    height: 32px;
+    padding: 0 $space-3 0 $space-8;
+    background-color: $bg-elevated;
+    border: 1px solid $border-subtle;
+    border-radius: $radius-sm;
+    font-size: $text-sm;
+    color: $text-muted;
+    cursor: not-allowed;
+    opacity: 0.5;
+
+    &::placeholder {
+      color: $text-muted;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  &__view-toggle {
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+    background-color: $bg-elevated;
+    border-radius: $radius-sm;
+    padding: $space-1;
+  }
+
+  &__view-btn {
+    @include flex-center;
+    width: 28px;
+    height: 28px;
+    border-radius: $radius-sm;
+    color: $text-muted;
+    font-size: 16px;
+    transition: background-color $transition-fast, color $transition-fast;
+
+    &:hover {
+      color: $text-primary;
+    }
+
+    &--active {
+      background-color: $bg-overlay;
+      color: $text-primary;
+    }
+  }
+
+  &__avatar {
+    @include flex-center;
+    width: 32px;
+    height: 32px;
+    border-radius: $radius-full;
+    background-color: $accent-muted;
+    border: 1px solid $accent;
+    font-size: $text-xs;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: $accent;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+}

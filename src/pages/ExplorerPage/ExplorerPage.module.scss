@@ -1,0 +1,26 @@
+@use '../../styles/variables' as *;
+
+.explorer {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  background-color: $bg-base;
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  &__loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+  }
+
+  &__file-input {
+    display: none;
+  }
+}
