@@ -11,7 +11,7 @@ src/
     FolderItem/       ✅  constants/index.ts (futuro)
     FileItem/         ✅  constants/index.ts (EXTENSION_COLORS)
     Modal/            ✅  CreateFolderModal · RenameModal · DeleteModal
-    ContextMenu/      ⏳
+    ContextMenu/      ✅  portal · Esc/click fuera · variante danger
     UploadPanel/      ⏳
     SharePanel/       ⏳
     MetadataPanel/    ⏳
@@ -143,7 +143,6 @@ interface DriveContentProps {
 ---
 
 ## Siguientes pasos
-1. `ContextMenu` ⏳ — menú opciones en FolderItem/FileItem → dispara `ModalState` rename/delete en ExplorerPage
-2. `UploadPanel` ⏳ — overlay progreso de subida
-3. `SharePanel` ⏳ — gestión de enlaces (usa `useShare`)
-4. `MetadataPanel` ⏳ — metadatos de archivo/carpeta
+1. `UploadPanel` ⏳ — overlay progreso de subida
+2. `SharePanel` ⏳ — gestión de enlaces (usa `useShare`)
+3. `MetadataPanel` ⏳ — metadatos de archivo/carpeta

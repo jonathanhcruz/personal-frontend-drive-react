@@ -21,7 +21,7 @@ _Última actualización: 2026-07-01_
 
 ### Hooks
 - `src/hooks/useAuth.ts` — login/logout mutations, token solo en memoria
-- `src/hooks/useFolders.ts` — query contenido (root/subfolder normalizado) + breadcrumb + mutations create/rename/delete
+- `src/hooks/useFolders.ts` — query contenido unificado (`FolderContents` tanto en raíz como subfolder) + breadcrumb + mutations create/rename/delete; `currentFolder` disponible en raíz
 - `src/hooks/useFiles.ts` — mutations upload/delete/download; invalida queryKeys.folders al mutar
 - `src/hooks/useShare.ts` — query listShares + mutations createShare/revokeShare; `newShare` expone último token
 
@@ -44,28 +44,33 @@ _Última actualización: 2026-07-01_
 - `src/components/Modal` — base con portal + cierre por Esc/overlay click · BEM `.modal`
 - `src/components/Modal/CreateFolderModal` — input controlado + Enter confirma + llama `createFolder`
 - `src/components/Modal/RenameModal` — input pre-cargado + deshabilita guardar si sin cambio + llama `renameFolder`
-- `src/components/Modal/DeleteModal` — confirmación `variant="danger"` · cubre carpeta y archivo
+- `src/components/Modal/DeleteModal` — confirmación `variant="danger"` · cubre carpeta y archivo · cierra al confirmar
+
+### Componentes globales — ContextMenu
+- `src/components/ContextMenu` — menú flotante portal · cierre por Esc/click fuera · BEM `.context-menu` · variante `danger` para Eliminar
+- Carpeta: Renombrar → `ModalState rename-folder` · Eliminar → `ModalState delete-folder`
+- Archivo: Descargar → `downloadFile` directo · Eliminar → `ModalState delete-file`
 
 ### Páginas
 - `src/pages/LoginPage/index.tsx` — diseño completo según PDF
-- `src/pages/ExplorerPage/index.tsx` — ensambla Sidebar + DriveTopbar + DriveContent; conectado a `useFolders` + `useFiles`; `ModalState` discriminated union; tres modales montados; `onNewFolder` conectado
+- `src/pages/ExplorerPage/index.tsx` — `ModalState` + `ContextMenuState` discriminated unions; todos los callbacks conectados; `activeFolderId = currentFolder?.id` para create/upload
 
 ---
 
 ## Pendiente ⏳
-
-### Componentes globales
-- `ContextMenu` — menú opciones para FolderItem/FileItem (dispara `onOptions`)
 
 ### Paneles del dashboard
 - `UploadPanel` — overlay "Subiendo 2 archivos..." con progreso
 - `SharePanel` — gestión de enlaces compartidos (usa `useShare`)
 - `MetadataPanel` — panel de metadatos de archivo/carpeta
 
-### Callbacks pendientes de conectar
-- `onOptions` en FolderItem/FileItem → esperando `ContextMenu` (dispara rename/delete via `ModalState`)
-
 ---
+
+## Bugs corregidos
+- **`listRoot` tipo incorrecto** — devolvía `FolderDto[]` pero el backend retorna `FolderContents`; corregido en `folders.service.ts`
+- **`currentFolder` nulo en raíz** — `useFolders` ignoraba el `folder` del response en raíz; ahora unificado con subfolder
+- **`parentId: null` al crear en raíz** — ExplorerPage ahora deriva `activeFolderId = currentFolder?.id` y lo usa en `createFolder` y `useFiles`
+- **DeleteModal no cerraba** — `onDelete` no llamaba `closeModal()`; corregido en ExplorerPage
 
 ## Decisiones tomadas
 - **Badge:** pospuesto — se extrae solo si el patrón se repite en FileItem/MetadataPanel
