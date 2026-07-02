@@ -1,6 +1,6 @@
 # Estado de construcción
 
-_Última actualización: 2026-06-29_
+_Última actualización: 2026-07-01_
 
 ## Completado ✅
 
@@ -37,19 +37,24 @@ _Última actualización: 2026-06-29_
 - `src/components/DriveContent` — heading con título/meta + "Nueva carpeta" + sección CARPETAS + sección ARCHIVOS + estado vacío
 
 ### Componentes de contenido
-- `src/components/FolderItem` — icono HiFolder (accent) + nombre truncado + botón HiDotsVertical (hover)
-- `src/components/FileItem` — badge coloreado por extensión (constants) + nombre truncado + tamaño + fecha + botón HiDotsVertical (hover)
+- `src/components/FolderItem` — icono HiFolder (accent) + nombre truncado + botón HiDotsVertical (hover) · prop `viewMode` · `--list` modifier
+- `src/components/FileItem` — badge coloreado por extensión (constants) + nombre truncado + tamaño + fecha + botón HiDotsVertical (hover) · prop `viewMode` · `--list` modifier (layout horizontal: badge | nombre+meta | ⋮)
+
+### Componentes globales — Modal
+- `src/components/Modal` — base con portal + cierre por Esc/overlay click · BEM `.modal`
+- `src/components/Modal/CreateFolderModal` — input controlado + Enter confirma + llama `createFolder`
+- `src/components/Modal/RenameModal` — input pre-cargado + deshabilita guardar si sin cambio + llama `renameFolder`
+- `src/components/Modal/DeleteModal` — confirmación `variant="danger"` · cubre carpeta y archivo
 
 ### Páginas
 - `src/pages/LoginPage/index.tsx` — diseño completo según PDF
-- `src/pages/ExplorerPage/index.tsx` — ensambla Sidebar + DriveTopbar + DriveContent; conectado a `useFolders` + `useFiles`
+- `src/pages/ExplorerPage/index.tsx` — ensambla Sidebar + DriveTopbar + DriveContent; conectado a `useFolders` + `useFiles`; `ModalState` discriminated union; tres modales montados; `onNewFolder` conectado
 
 ---
 
 ## Pendiente ⏳
 
 ### Componentes globales
-- `Modal` — para crear carpeta, renombrar, confirmar eliminación
 - `ContextMenu` — menú opciones para FolderItem/FileItem (dispara `onOptions`)
 
 ### Paneles del dashboard
@@ -58,8 +63,7 @@ _Última actualización: 2026-06-29_
 - `MetadataPanel` — panel de metadatos de archivo/carpeta
 
 ### Callbacks pendientes de conectar
-- `onOptions` en FolderItem/FileItem → esperando `ContextMenu`
-- `onNewFolder` en DriveContent → esperando `Modal`
+- `onOptions` en FolderItem/FileItem → esperando `ContextMenu` (dispara rename/delete via `ModalState`)
 
 ---
 

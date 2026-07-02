@@ -10,7 +10,7 @@ src/
     DriveContent/     ✅
     FolderItem/       ✅  constants/index.ts (futuro)
     FileItem/         ✅  constants/index.ts (EXTENSION_COLORS)
-    Modal/            ⏳
+    Modal/            ✅  CreateFolderModal · RenameModal · DeleteModal
     ContextMenu/      ⏳
     UploadPanel/      ⏳
     SharePanel/       ⏳
@@ -143,8 +143,7 @@ interface DriveContentProps {
 ---
 
 ## Siguientes pasos
-1. `Modal` ⏳ — crear carpeta, renombrar, confirmar eliminación → conecta `onNewFolder` en DriveContent
-2. `ContextMenu` ⏳ — menú opciones en FolderItem/FileItem → conecta `onOptions`
-3. `UploadPanel` ⏳ — overlay progreso de subida
-4. `SharePanel` ⏳ — gestión de enlaces (usa `useShare`)
-5. `MetadataPanel` ⏳ — metadatos de archivo/carpeta
+1. `ContextMenu` ⏳ — menú opciones en FolderItem/FileItem → dispara `ModalState` rename/delete en ExplorerPage
+2. `UploadPanel` ⏳ — overlay progreso de subida
+3. `SharePanel` ⏳ — gestión de enlaces (usa `useShare`)
+4. `MetadataPanel` ⏳ — metadatos de archivo/carpeta
