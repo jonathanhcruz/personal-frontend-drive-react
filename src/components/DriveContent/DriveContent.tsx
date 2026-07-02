@@ -41,13 +41,21 @@ export const DriveContent = ({
       {subfolders.length > 0 && (
         <section className={styles['drive-content__section']}>
           <h2 className={styles['drive-content__section-label']}>CARPETAS</h2>
-          <div className={styles['drive-content__folder-grid']}>
+          <div
+            className={[
+              styles['drive-content__folder-grid'],
+              viewMode === 'list' ? styles['drive-content__folder-grid--list'] : '',
+            ]
+              .filter(Boolean)
+              .join(' ')}
+          >
             {subfolders.map((folder) => (
               <FolderItem
                 key={folder.id}
                 folder={folder}
                 onClick={(id) => navigate(`/drive/${id}`)}
                 onOptions={(_id) => {}}
+                viewMode={viewMode}
               />
             ))}
           </div>
@@ -70,6 +78,7 @@ export const DriveContent = ({
                 key={file.id}
                 file={file}
                 onOptions={(_id) => {}}
+                viewMode={viewMode}
               />
             ))}
           </div>

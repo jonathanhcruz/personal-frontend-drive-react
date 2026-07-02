@@ -1,0 +1,63 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.modal {
+  @include overlay;
+  @include flex-center;
+
+  &__panel {
+    background-color: $bg-surface;
+    border: 1px solid $border;
+    border-radius: $radius-lg;
+    width: 100%;
+    max-width: 440px;
+    padding: $space-6;
+    display: flex;
+    flex-direction: column;
+    gap: $space-5;
+  }
+
+  &__header {
+    @include flex-between;
+  }
+
+  &__title {
+    font-size: $text-md;
+    font-weight: 600;
+    color: $text-primary;
+    margin: 0;
+  }
+
+  &__close {
+    @include flex-center;
+    @include focus-ring;
+    background: none;
+    border: none;
+    color: $text-secondary;
+    cursor: pointer;
+    padding: $space-1;
+    border-radius: $radius-sm;
+    font-size: $text-lg;
+    line-height: 0;
+    transition:
+      color $transition-fast,
+      background-color $transition-fast;
+
+    &:hover {
+      color: $text-primary;
+      background-color: $bg-elevated;
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: $space-4;
+  }
+
+  &__footer {
+    display: flex;
+    gap: $space-3;
+    justify-content: flex-end;
+  }
+}

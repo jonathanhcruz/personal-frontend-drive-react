@@ -2,14 +2,23 @@ import { HiFolder, HiDotsVertical } from 'react-icons/hi';
 import styles from './FolderItem.module.scss';
 import type { FolderItemProps } from './FolderItem.types';
 
-export const FolderItem = ({ folder, onClick, onOptions }: FolderItemProps): React.JSX.Element => {
+export const FolderItem = ({ folder, onClick, onOptions, viewMode = 'grid' }: FolderItemProps): React.JSX.Element => {
   const handleOptionsClick = (e: React.MouseEvent): void => {
     e.stopPropagation();
     onOptions(folder.id);
   };
 
   return (
-    <div className={styles['folder-item']} onClick={() => onClick(folder.id)} role="button" tabIndex={0}
+    <div
+      className={[
+        styles['folder-item'],
+        viewMode === 'list' ? styles['folder-item--list'] : '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
+      onClick={() => onClick(folder.id)}
+      role="button"
+      tabIndex={0}
       onKeyDown={(e) => e.key === 'Enter' && onClick(folder.id)}
     >
       <div className={styles['folder-item__body']}>

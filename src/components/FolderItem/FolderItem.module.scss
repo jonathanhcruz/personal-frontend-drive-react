@@ -51,6 +51,10 @@
     @include truncate;
   }
 
+  &--list {
+    width: 100%;
+  }
+
   &__menu-btn {
     @include flex-center;
     width: 24px;

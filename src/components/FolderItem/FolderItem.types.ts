@@ -4,4 +4,5 @@ export interface FolderItemProps {
   folder: FolderDto;
   onClick: (id: string) => void;
   onOptions: (id: string) => void;
+  viewMode?: 'grid' | 'list';
 }

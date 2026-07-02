@@ -18,7 +18,7 @@ const formatSize = (bytes: number): string => {
 const formatDate = (dateStr: string): string =>
   new Date(dateStr).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
 
-export const FileItem = ({ file, onOptions }: FileItemProps): React.JSX.Element => {
+export const FileItem = ({ file, onOptions, viewMode = 'grid' }: FileItemProps): React.JSX.Element => {
   const ext = getExtension(file.name);
   const badgeColor = EXTENSION_COLORS[ext] ?? DEFAULT_BADGE_COLOR;
 
@@ -28,23 +28,20 @@ export const FileItem = ({ file, onOptions }: FileItemProps): React.JSX.Element 
   };
 
   return (
-    <div className={styles['file-item']}>
-      <div className={styles['file-item__header']}>
-        <span
-          className={styles['file-item__badge']}
-          style={{ backgroundColor: badgeColor }}
-        >
-          {ext.toUpperCase() || '—'}
-        </span>
-        <button
-          type="button"
-          className={styles['file-item__menu-btn']}
-          onClick={handleOptionsClick}
-          aria-label="Opciones de archivo"
-        >
-          <HiDotsVertical />
-        </button>
-      </div>
+    <div
+      className={[
+        styles['file-item'],
+        viewMode === 'list' ? styles['file-item--list'] : '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
+    >
+      <span
+        className={styles['file-item__badge']}
+        style={{ backgroundColor: badgeColor }}
+      >
+        {ext.toUpperCase() || '—'}
+      </span>
 
       <div className={styles['file-item__info']}>
         <span className={styles['file-item__name']}>{file.name}</span>
@@ -52,6 +49,15 @@ export const FileItem = ({ file, onOptions }: FileItemProps): React.JSX.Element 
           {formatSize(file.size)} · {formatDate(file.createdAt)}
         </span>
       </div>
+
+      <button
+        type="button"
+        className={styles['file-item__menu-btn']}
+        onClick={handleOptionsClick}
+        aria-label="Opciones de archivo"
+      >
+        <HiDotsVertical />
+      </button>
     </div>
   );
 };

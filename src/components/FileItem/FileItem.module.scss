@@ -2,6 +2,7 @@
 @use '../../styles/mixins' as *;
 
 .file-item {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: $space-3;
@@ -21,16 +22,47 @@
     }
   }
 
-  &__header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
+  &--list {
+    flex-direction: row;
+    align-items: center;
+    gap: $space-3;
+    padding: $space-2 $space-3;
+
+    .file-item__badge {
+      width: 32px;
+      height: 32px;
+      font-size: 8px;
+      flex-shrink: 0;
+    }
+
+    .file-item__info {
+      flex: 1;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: $space-4;
+    }
+
+    .file-item__name {
+      flex: 1;
+    }
+
+    .file-item__meta {
+      flex-shrink: 0;
+    }
+
+    .file-item__menu-btn {
+      position: static;
+      opacity: 0;
+      flex-shrink: 0;
+    }
   }
 
   &__badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    align-self: flex-start;
     width: 40px;
     height: 40px;
     border-radius: $radius-sm;
@@ -43,6 +75,9 @@
 
   &__menu-btn {
     @include flex-center;
+    position: absolute;
+    top: $space-2;
+    right: $space-2;
     width: 24px;
     height: 24px;
     border-radius: $radius-sm;
