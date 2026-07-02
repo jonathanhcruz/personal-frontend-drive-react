@@ -12,6 +12,7 @@ export const DriveContent = ({
   files,
   viewMode,
   onNewFolder,
+  onOptions,
 }: DriveContentProps): React.JSX.Element => {
   const navigate = useNavigate();
 
@@ -54,7 +55,7 @@ export const DriveContent = ({
                 key={folder.id}
                 folder={folder}
                 onClick={(id) => navigate(`/drive/${id}`)}
-                onOptions={(_id) => {}}
+                onOptions={(id, pos) => onOptions(id, 'folder', pos)}
                 viewMode={viewMode}
               />
             ))}
@@ -77,7 +78,7 @@ export const DriveContent = ({
               <FileItem
                 key={file.id}
                 file={file}
-                onOptions={(_id) => {}}
+                onOptions={(id, pos) => onOptions(id, 'file', pos)}
                 viewMode={viewMode}
               />
             ))}

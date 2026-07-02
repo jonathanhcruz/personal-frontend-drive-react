@@ -22,9 +22,10 @@ export const FileItem = ({ file, onOptions, viewMode = 'grid' }: FileItemProps):
   const ext = getExtension(file.name);
   const badgeColor = EXTENSION_COLORS[ext] ?? DEFAULT_BADGE_COLOR;
 
-  const handleOptionsClick = (e: React.MouseEvent): void => {
+  const handleOptionsClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.stopPropagation();
-    onOptions(file.id);
+    const rect = e.currentTarget.getBoundingClientRect();
+    onOptions(file.id, { x: rect.left, y: rect.bottom + 4 });
   };
 
   return (

@@ -10,6 +10,7 @@ import {
 import type {
   BreadcrumbItem,
   CreateFolderDto,
+  FolderContents,
   FolderDto,
   FolderFile,
 } from '../types/api.types';
@@ -53,17 +54,11 @@ export const useFolders = (folderId?: string): UseFoldersReturn => {
       : listRoot,
   });
 
-  const subfolders: FolderDto[] = folderId
-    ? ((contentData as { subfolders: FolderDto[] } | undefined)?.subfolders ?? [])
-    : ((contentData as FolderDto[] | undefined) ?? []);
+  const contents = contentData as FolderContents | undefined;
 
-  const files: FolderFile[] = folderId
-    ? ((contentData as { files: FolderFile[] } | undefined)?.files ?? [])
-    : [];
-
-  const currentFolder: FolderDto | null = folderId
-    ? ((contentData as { folder: FolderDto } | undefined)?.folder ?? null)
-    : null;
+  const subfolders: FolderDto[] = contents?.subfolders ?? [];
+  const files: FolderFile[] = contents?.files ?? [];
+  const currentFolder: FolderDto | null = contents?.folder ?? null;
 
   const { data: breadcrumbData, isLoading: isBreadcrumbLoading } = useQuery({
     queryKey: folderId ? queryKeys.folders.breadcrumb(folderId) : ['folders', 'breadcrumb-noop'],

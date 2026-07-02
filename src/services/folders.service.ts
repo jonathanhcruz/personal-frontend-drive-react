@@ -8,8 +8,8 @@ import type {
   RenameFolderDto,
 } from '../types/api.types';
 
-export const listRoot = async (): Promise<FolderDto[]> => {
-  const { data } = await axiosInstance.get<ApiResponse<FolderDto[]>>('/api/folders');
+export const listRoot = async (): Promise<FolderContents> => {
+  const { data } = await axiosInstance.get<ApiResponse<FolderContents>>('/api/folders');
   return data.data;
 };
 

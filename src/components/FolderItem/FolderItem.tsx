@@ -3,9 +3,10 @@ import styles from './FolderItem.module.scss';
 import type { FolderItemProps } from './FolderItem.types';
 
 export const FolderItem = ({ folder, onClick, onOptions, viewMode = 'grid' }: FolderItemProps): React.JSX.Element => {
-  const handleOptionsClick = (e: React.MouseEvent): void => {
+  const handleOptionsClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.stopPropagation();
-    onOptions(folder.id);
+    const rect = e.currentTarget.getBoundingClientRect();
+    onOptions(folder.id, { x: rect.left, y: rect.bottom + 4 });
   };
 
   return (
