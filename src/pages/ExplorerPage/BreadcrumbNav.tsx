@@ -7,8 +7,12 @@ interface BreadcrumbNavProps {
   breadcrumb: BreadcrumbItem[];
 }
 
+const MAX_VISIBLE = 4;
+
 export const BreadcrumbNav = ({ breadcrumb }: BreadcrumbNavProps): React.JSX.Element => {
   const isAtRoot = breadcrumb.length === 0;
+  const isTruncated = breadcrumb.length > MAX_VISIBLE;
+  const visibleItems = isTruncated ? breadcrumb.slice((MAX_VISIBLE -1 ) * -1) : breadcrumb;
 
   return (
     <nav className={styles['breadcrumb-nav']}>
@@ -22,8 +26,15 @@ export const BreadcrumbNav = ({ breadcrumb }: BreadcrumbNavProps): React.JSX.Ele
         </Link>
       )}
 
-      {breadcrumb.map((item, index) => {
-        const isCurrent = index === breadcrumb.length - 1;
+      {isTruncated && (
+        <span className={styles['breadcrumb-nav__segment']}>
+          <HiChevronRight className={styles['breadcrumb-nav__sep']} />
+          <span className={styles['breadcrumb-nav__ellipsis']}>…</span>
+        </span>
+      )}
+
+      {visibleItems.map((item, index) => {
+        const isCurrent = index === visibleItems.length - 1;
         return (
           <span key={item.id} className={styles['breadcrumb-nav__segment']}>
             <HiChevronRight className={styles['breadcrumb-nav__sep']} />

@@ -16,11 +16,24 @@
     font-size: 14px;
   }
 
+  &__ellipsis {
+    font-size: $text-sm;
+    color: $text-muted;
+    cursor: default;
+    user-select: none;
+  }
+
   &__item {
     font-size: $text-sm;
     color: $text-secondary;
     text-decoration: none;
     transition: color $transition-fast;
+    max-width: 100px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    line-clamp: 1; 
 
     &:hover:not(&--current) {
       color: $text-primary;
