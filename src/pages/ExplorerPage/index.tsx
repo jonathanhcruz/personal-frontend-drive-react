@@ -8,7 +8,7 @@ import { ContextMenu } from '../../components/ContextMenu';
 import { useFolders } from '../../hooks/useFolders';
 import { useFiles } from '../../hooks/useFiles';
 import { useTopbar } from '../../hooks/useTopbar';
-import type { ViewMode } from '../../components/DriveTopbar';
+import type { ViewMode } from '../../types/api.types';
 import type { MenuItem } from '../../components/ContextMenu';
 import { BreadcrumbNav } from './BreadcrumbNav';
 import { ExplorerTopbarActions } from './ExplorerTopbarActions';

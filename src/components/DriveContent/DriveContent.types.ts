@@ -1,5 +1,5 @@
 import type { FolderDto, FolderFile } from '../../types/api.types';
-import type { ViewMode } from '../DriveTopbar';
+import type { ViewMode } from '../../types/api.types';
 
 export interface DriveContentProps {
   folderName: string;

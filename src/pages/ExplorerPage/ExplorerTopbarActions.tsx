@@ -1,6 +1,6 @@
 import { HiUpload, HiViewGrid, HiViewList } from 'react-icons/hi';
 import { Button } from '../../components/Button';
-import type { ViewMode } from '../../components/DriveTopbar';
+import type { ViewMode } from '../../types/api.types';
 import styles from './ExplorerTopbarActions.module.scss';
 
 interface ExplorerTopbarActionsProps {

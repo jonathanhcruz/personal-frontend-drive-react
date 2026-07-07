@@ -9,7 +9,7 @@ src/
   components/
     Sidebar/          ✅  constants/index.ts (NAV_ITEMS)
     AppTopbar/        ✅  slots left/right · search fijo · avatar fijo · BEM .app-topbar
-    DriveTopbar/      ⚠️  pendiente de borrar (reemplazado por AppTopbar)
+    DriveTopbar/      ✅  eliminado — ViewMode movido a src/types/ui.types.ts
     DriveContent/     ✅
     FolderItem/       ✅  constants/index.ts (futuro)
     FileItem/         ✅  constants/index.ts (EXTENSION_COLORS)

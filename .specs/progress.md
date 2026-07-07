@@ -63,7 +63,7 @@ _Última actualización: 2026-07-07_
 ## Pendiente ⏳
 
 ### Limpieza post-refactor
-- Borrar `src/components/DriveTopbar/` — reemplazado por `AppTopbar`; pendiente confirmación visual
+- Borrar `src/components/DriveTopbar/` — ✅ eliminado; `ViewMode` movido a `src/types/ui.types.ts`, re-exportado desde `api.types/index.ts`
 
 ### SharedPage — contenido real
 - Definir qué muestra (archivos compartidos por el usuario, o compartidos con el usuario)
