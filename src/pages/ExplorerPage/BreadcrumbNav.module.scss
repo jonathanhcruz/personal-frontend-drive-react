@@ -1,0 +1,35 @@
+@use '../../styles/variables' as *;
+
+.breadcrumb-nav {
+  display: flex;
+  align-items: center;
+  gap: $space-1;
+
+  &__segment {
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+  }
+
+  &__sep {
+    color: $text-muted;
+    font-size: 14px;
+  }
+
+  &__item {
+    font-size: $text-sm;
+    color: $text-secondary;
+    text-decoration: none;
+    transition: color $transition-fast;
+
+    &:hover:not(&--current) {
+      color: $text-primary;
+    }
+
+    &--current {
+      color: $text-primary;
+      font-weight: 500;
+      cursor: default;
+    }
+  }
+}

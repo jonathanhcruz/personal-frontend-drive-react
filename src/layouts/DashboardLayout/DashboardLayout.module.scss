@@ -1,0 +1,15 @@
+@use '../../styles/variables' as *;
+
+.dashboard-layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  background-color: $bg-base;
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+  }
+}

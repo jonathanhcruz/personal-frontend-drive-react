@@ -59,6 +59,17 @@ _Última actualización: 2026-07-01_
 
 ## Pendiente ⏳
 
+### Arquitectura — layout compartido
+- `DashboardLayout` — Sidebar + AppTopbar con slots (TopbarContext) + Outlet; reemplaza repetición en cada página
+- `AppTopbar` — topbar genérico con `left`/`right` slots; reemplaza `DriveTopbar` hardcodeado
+- `router.tsx` — agregar layout route + ruta `/shared`
+
+### Breadcrumb — navegación funcional
+- `DriveTopbar` (o futuro `AppTopbar`) — items del breadcrumb como `<Link to="/drive/:id">` en lugar de texto plano; root → `/drive`, subfolder → `/drive/:folderId`; último item sin link
+
+### Páginas nuevas
+- `SharedPage` — vista de archivos compartidos; mismo shell (DashboardLayout) distinto contenido
+
 ### Paneles del dashboard
 - `UploadPanel` — overlay "Subiendo 2 archivos..." con progreso
 - `SharePanel` — gestión de enlaces compartidos (usa `useShare`)

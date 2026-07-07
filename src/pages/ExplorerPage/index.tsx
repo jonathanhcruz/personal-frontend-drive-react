@@ -2,15 +2,16 @@ import { useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { HiDownload, HiPencilAlt, HiTrash } from 'react-icons/hi';
 import { Spinner } from '../../components/Spinner';
-import { Sidebar } from '../../components/Sidebar';
-import { DriveTopbar } from '../../components/DriveTopbar';
 import { DriveContent } from '../../components/DriveContent';
 import { CreateFolderModal, DeleteModal, RenameModal } from '../../components/Modal';
 import { ContextMenu } from '../../components/ContextMenu';
 import { useFolders } from '../../hooks/useFolders';
 import { useFiles } from '../../hooks/useFiles';
+import { useTopbar } from '../../hooks/useTopbar';
 import type { ViewMode } from '../../components/DriveTopbar';
 import type { MenuItem } from '../../components/ContextMenu';
+import { BreadcrumbNav } from './BreadcrumbNav';
+import { ExplorerTopbarActions } from './ExplorerTopbarActions';
 import styles from './ExplorerPage.module.scss';
 
 type ModalState =
@@ -111,33 +112,33 @@ const ExplorerPage = (): React.JSX.Element => {
 
   const folderName = folderId ? (currentFolder?.name ?? '') : 'Mi Drive';
 
+  useTopbar({
+    left: <BreadcrumbNav breadcrumb={breadcrumb} />,
+    right: (
+      <ExplorerTopbarActions
+        viewMode={viewMode}
+        onViewChange={setViewMode}
+        onUpload={handleUpload}
+      />
+    ),
+  });
+
   return (
-    <div className={styles['explorer']}>
-      <Sidebar />
-
-      <div className={styles['explorer__main']}>
-        <DriveTopbar
-          breadcrumb={breadcrumb}
+    <>
+      {isLoading ? (
+        <div className={styles['explorer__loading']}>
+          <Spinner size="lg" />
+        </div>
+      ) : (
+        <DriveContent
+          folderName={folderName}
+          subfolders={subfolders}
+          files={files}
           viewMode={viewMode}
-          onViewChange={setViewMode}
-          onUpload={handleUpload}
+          onNewFolder={() => setModal({ type: 'create-folder' })}
+          onOptions={handleOptions}
         />
-
-        {isLoading ? (
-          <div className={styles['explorer__loading']}>
-            <Spinner size="lg" />
-          </div>
-        ) : (
-          <DriveContent
-            folderName={folderName}
-            subfolders={subfolders}
-            files={files}
-            viewMode={viewMode}
-            onNewFolder={() => setModal({ type: 'create-folder' })}
-            onOptions={handleOptions}
-          />
-        )}
-      </div>
+      )}
 
       <input
         ref={fileInputRef}
@@ -182,7 +183,7 @@ const ExplorerPage = (): React.JSX.Element => {
         }}
         isLoading={modal?.type === 'delete-folder' ? isDeleting : isDeletingFile}
       />
-    </div>
+    </>
   );
 };
 

@@ -1,0 +1,32 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.explorer-topbar-actions {
+  &__view-toggle {
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+    background-color: $bg-elevated;
+    border-radius: $radius-sm;
+    padding: $space-1;
+  }
+
+  &__view-btn {
+    @include flex-center;
+    width: 28px;
+    height: 28px;
+    border-radius: $radius-sm;
+    color: $text-muted;
+    font-size: 16px;
+    transition: background-color $transition-fast, color $transition-fast;
+
+    &:hover {
+      color: $text-primary;
+    }
+
+    &--active {
+      background-color: $bg-overlay;
+      color: $text-primary;
+    }
+  }
+}

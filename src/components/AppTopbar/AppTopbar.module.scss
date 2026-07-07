@@ -1,0 +1,77 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.app-topbar {
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+  height: 56px;
+  min-height: 56px;
+  padding: 0 $space-6;
+  background-color: $bg-surface;
+  border-bottom: 1px solid $border-subtle;
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+    flex-shrink: 0;
+  }
+
+  &__search {
+    position: relative;
+    flex: 1;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  &__search-icon {
+    position: absolute;
+    left: $space-3;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $text-muted;
+    font-size: 15px;
+    pointer-events: none;
+  }
+
+  &__search-input {
+    width: 100%;
+    height: 32px;
+    padding: 0 $space-3 0 $space-8;
+    background-color: $bg-elevated;
+    border: 1px solid $border-subtle;
+    border-radius: $radius-sm;
+    font-size: $text-sm;
+    color: $text-muted;
+    cursor: not-allowed;
+    opacity: 0.5;
+
+    &::placeholder {
+      color: $text-muted;
+    }
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  &__avatar {
+    @include flex-center;
+    width: 32px;
+    height: 32px;
+    border-radius: $radius-full;
+    background-color: $accent-muted;
+    border: 1px solid $accent;
+    font-size: $text-xs;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: $accent;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+}
