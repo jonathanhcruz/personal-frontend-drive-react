@@ -1,29 +1,46 @@
 # Plan: Dashboard
 
-## Estructura de carpetas
+## Estructura de carpetas (estado actual)
 
 ```
 src/
   layouts/
     DashboardLayout/  ✅  DashboardLayout.tsx · TopbarContext.tsx · DashboardLayout.module.scss
   components/
-    Sidebar/          ✅  constants/index.ts (NAV_ITEMS)
     AppTopbar/        ✅  slots left/right · search fijo · avatar fijo · BEM .app-topbar
-    DriveTopbar/      ✅  eliminado — ViewMode movido a src/types/ui.types.ts
-    DriveContent/     ✅
-    FolderItem/       ✅  constants/index.ts (futuro)
-    FileItem/         ✅  constants/index.ts (EXTENSION_COLORS)
-    Modal/            ✅  CreateFolderModal · RenameModal · DeleteModal
+    BreadcrumbNav/    ✅  links funcionales · truncación MAX_VISIBLE=4 · BEM .breadcrumb-nav
+    Button/           ✅  primary/secondary/ghost/danger · sm/md/lg · loading · icons
     ContextMenu/      ✅  portal · Esc/click fuera · variante danger
-    UploadPanel/      ⏳
-    SharePanel/       ⏳
-    MetadataPanel/    ⏳
+    DriveContent/     ✅
+    ExplorerTopbarActions/ ✅  view-toggle grid/list · botón Subir · BEM .explorer-topbar-actions
+    FileItem/         ✅  EXTENSION_COLORS en constants/
+    FolderItem/       ✅
+    Input/            ✅  TextInput · password toggle · size variants · error state
+    Logo/             ✅  dot animado · sm/md/lg
+    MetadataPanel/    🏗️  scaffold vacío — pendiente implementar
+    Modal/            ✅  CreateFolderModal · RenameModal · DeleteModal
+    SharePanel/       ✅  modal compartir · useShare interno · copiar token · revocar enlaces
+    Sidebar/          ✅  NAV_ITEMS en constants/
+    Spinner/          ✅  sm/md/lg · primary/muted
+    UploadPanel/      🏗️  scaffold vacío — pendiente implementar
   hooks/
-    useTopbar.ts      ✅  inyecta TopbarConfig en el layout vía useLayoutEffect
+    useAuth.ts        ✅
+    useFiles.ts       ✅
+    useFolders.ts     ✅
+    useShare.ts       ✅
+    useTopbar.ts      ✅
   pages/
-    LoginPage/        ✅  index.tsx
-    ExplorerPage/     ✅  index.tsx · BreadcrumbNav.tsx · ExplorerTopbarActions.tsx
-    SharedPage/       ⏳  placeholder listo · contenido real pendiente
+    LoginPage/        ✅
+    ExplorerPage/     ✅  solo index.tsx — BreadcrumbNav y ExplorerTopbarActions en components/
+    SharedPage/       ⏳  placeholder · contenido real pendiente
+  services/
+    auth.service.ts   ✅
+    files.service.ts  ✅  incluye share endpoints
+    folders.service.ts ✅
+    share.service.ts  ✅  getPublicDownloadUrl helper
+  types/
+    api.types/        ✅  login · files · folders · index (re-exporta ui.types)
+    ui.types.ts       ✅  ViewMode = 'grid' | 'list'
 ```
 
 ## Layout general
@@ -33,124 +50,89 @@ src/
 │   Sidebar   │              drive-main                  │
 │  ~220px     │                                          │
 │  fijo       │  ┌──────────────────────────────────┐   │
-│             │  │         DriveTopbar               │   │
-│  Logo sm +  │  │  breadcrumb · search · toggle ·   │   │
-│  PRIVATE    │  │  + Subir · avatar JL              │   │
-│  DRIVE      │  ├──────────────────────────────────┤   │
-│             │  │         DriveContent              │   │
-│  Mi Drive   │  │  título · metadata                │   │
-│  Compartido │  │  CARPETAS → placeholders          │   │
-│             │  │  ARCHIVOS → placeholders          │   │
-│  ─────────  │  └──────────────────────────────────┘   │
+│             │  │           AppTopbar               │   │
+│  Logo sm +  │  │  left slot · search · avatar JL  │   │
+│  PRIVATE    │  ├──────────────────────────────────┤   │
+│  DRIVE      │  │         DriveContent              │   │
+│             │  │  título · metadata                │   │
+│  Mi Drive   │  │  CARPETAS → FolderItem            │   │
+│  Compartido │  │  ARCHIVOS → FileItem              │   │
+│             │  └──────────────────────────────────┘   │
+│  ─────────  │                                          │
 │  Storage    │                                          │
 └─────────────┴──────────────────────────────────────────┘
 ```
 
 ## BEM blocks
-| Componente    | Bloque BEM      |
-|---------------|-----------------|
-| ExplorerPage  | `.explorer`     |
-| Sidebar       | `.sidebar`      |
-| DriveTopbar   | `.drive-topbar` |
-| DriveContent  | `.drive-content`|
+| Componente          | Bloque BEM                  |
+|---------------------|-----------------------------|
+| ExplorerPage        | `.explorer`                 |
+| Sidebar             | `.sidebar`                  |
+| AppTopbar           | `.app-topbar`               |
+| DriveContent        | `.drive-content`            |
+| ContextMenu         | `.context-menu`             |
+| Modal               | `.modal`                    |
+| SharePanel          | `.share-panel`              |
+| FolderItem          | `.folder-item`              |
+| FileItem            | `.file-item`                |
+| BreadcrumbNav       | `.breadcrumb-nav`           |
+| ExplorerTopbarActions | `.explorer-topbar-actions`|
 
 ---
 
 ## Fase 1 — `Sidebar` ✅
-
-**Responsabilidad:** columna izquierda fija. No recibe props de data — autónomo.
-
-**Contenido:**
-- Brand: `<Logo size="sm" />` + texto "PRIVATE" / "DRIVE" (dos líneas)
-- Nav: `<NavLink to="/drive">Mi Drive</NavLink>` + `<NavLink to="/shared">Compartidos</NavLink>` con active state
-- Storage: barra de progreso + "ALMACENAMIENTO · 37%" + "18.4 GB / 30 GB" (hardcodeado)
-
-**Props:** ninguna por ahora (storage se hardcodea)
-
-**Validación:** `tsc --noEmit`
+Columna izquierda fija. Autónoma (no recibe props de data).
+- Brand: `<Logo size="sm" />` + texto "PRIVATE" / "DRIVE"
+- Nav: NavLinks Mi Drive / Compartidos con active state
+- Storage: barra de progreso + datos hardcodeados
 
 ---
 
-## Fase 2 — `DriveTopbar` ✅
-
-**Responsabilidad:** barra superior del área principal.
-
-**Props:**
-```ts
-interface DriveTopbarProps {
-  breadcrumb: BreadcrumbItem[];
-  viewMode: 'grid' | 'list';
-  onViewChange: (mode: 'grid' | 'list') => void;
-  onUpload: () => void;
-}
-```
-
-**Contenido:**
-- Breadcrumb: items separados por `›`
-- Search: `<input disabled placeholder="Buscar..." />`
-- Toggle: dos botones icono (grid/list) — el activo resaltado
-- Botón "+ Subir" variant primary
-- Avatar: `<div>JL</div>` mock
-
-**Validación:** `tsc --noEmit`
+## Fase 2 — `AppTopbar` ✅
+Reemplaza al anterior `DriveTopbar` (eliminado). Puramente presentacional.
+- Slots `left` / `right` como `ReactNode`
+- Search y avatar siempre fijos
+- `ExplorerPage` inyecta `BreadcrumbNav` en `left` y `ExplorerTopbarActions` en `right` vía `useTopbar`
 
 ---
 
 ## Fase 3 — `DriveContent` ✅
-
-**Responsabilidad:** área de contenido scrolleable.
-
-**Props:**
-```ts
-interface DriveContentProps {
-  folderName: string;
-  subfolders: FolderDto[];
-  files: FolderFile[];
-  viewMode: 'grid' | 'list';
-  onNewFolder: () => void;
-}
-```
-
-**Contenido:**
-- Título: nombre de la carpeta (o "Mi Drive" si es raíz)
-- Metadata: "X carpetas · Y archivos"
-- Botón "Nueva carpeta" (ghost o secondary)
-- Sección "CARPETAS": label + grid de placeholders (`FolderItem` pendiente)
-- Sección "ARCHIVOS": label + grid/lista de placeholders (`FileItem` pendiente)
-
-**Validación:** `tsc --noEmit`
+Área de contenido scrolleable.
+- Título + metadata (X carpetas · Y archivos)
+- Botón "Nueva carpeta"
+- Secciones CARPETAS / ARCHIVOS con FolderItem / FileItem
 
 ---
 
 ## Fase 4 — `ExplorerPage` ensamblaje ✅
+Shell de la vista principal. Owns estado `viewMode` + `modal` + `contextMenu`.
 
-**Responsabilidad:** shell de dos columnas, owns el estado.
-
-**Estado local:**
-- `viewMode: 'grid' | 'list'` — default `'grid'`
-
-**Conecta hooks:**
-- `useFolders(folderId)` → pasa `breadcrumb`, `subfolders`, `files`, `currentFolder` a los componentes
-- `useFiles(folderId)` → `uploadFile` se pasa a `DriveTopbar.onUpload`
-
-**Estructura JSX:**
-```tsx
-<div className={styles['explorer']}>
-  <Sidebar />
-  <main className={styles['explorer__main']}>
-    <DriveTopbar breadcrumb={...} viewMode={viewMode} onViewChange={setViewMode} onUpload={...} />
-    <DriveContent folderName={...} subfolders={...} files={...} viewMode={viewMode} onNewFolder={...} />
-  </main>
-</div>
+**ModalState:**
+```ts
+| { type: 'create-folder' }
+| { type: 'rename-folder'; id: string; name: string }
+| { type: 'delete-folder'; id: string; name: string }
+| { type: 'delete-file';   id: string; name: string }
+| { type: 'share-file';    id: string; name: string }
 ```
 
-**Validación:** `tsc --noEmit` + verificación visual en browser
+**Menú contextual de archivos:** Compartir · Descargar · Eliminar  
+**Menú contextual de carpetas:** Renombrar · Eliminar
+
+---
+
+## Fase 5 — `SharePanel` ✅
+Modal para compartir archivos individuales.
+- Usa `useShare(fileId)` internamente
+- Lista enlaces activos con fecha creación/expiración + botón revocar
+- Botón "Crear enlace" → muestra URL con botón copiar (feedback "Copiado" 2s)
+- `createdUrl` se resetea al cambiar de `fileId`
+- ⚠️ Pendiente verificar: URL usa `/api/files/share/${token}`; `share.service.ts` tiene helper con `/api/share/${token}` — puede ser que difieran el endpoint público vs. autenticado
 
 ---
 
 ## Siguientes pasos
-1. Borrar `DriveTopbar/` — confirmar visualmente primero ⚠️
-2. `SharedPage` ⏳ — contenido real (requiere definir endpoint backend)
-3. `UploadPanel` ⏳ — overlay progreso de subida
-4. `SharePanel` ⏳ — gestión de enlaces (usa `useShare`)
-5. `MetadataPanel` ⏳ — metadatos de archivo/carpeta
+1. `SharedPage` ⏳ — contenido real (definir endpoint backend, implementar `SharedContent`)
+2. `UploadPanel` ⏳ — overlay progreso de subida (scaffold existe)
+3. `MetadataPanel` ⏳ — metadatos de archivo/carpeta (scaffold existe)
+4. ⚠️ Verificar URL pública de share (`/api/share/` vs. `/api/files/share/`)

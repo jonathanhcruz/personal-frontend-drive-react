@@ -11,8 +11,8 @@ import { useFiles } from '../../hooks/useFiles';
 import { useTopbar } from '../../hooks/useTopbar';
 import type { ViewMode } from '../../types/api.types';
 import type { MenuItem } from '../../components/ContextMenu';
-import { BreadcrumbNav } from './BreadcrumbNav';
-import { ExplorerTopbarActions } from './ExplorerTopbarActions';
+import { BreadcrumbNav } from '../../components/BreadcrumbNav';
+import { ExplorerTopbarActions } from '../../components/ExplorerTopbarActions';
 import styles from './ExplorerPage.module.scss';
 
 type ModalState =

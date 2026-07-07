@@ -1,13 +1,7 @@
 import { HiUpload, HiViewGrid, HiViewList } from 'react-icons/hi';
-import { Button } from '../../components/Button';
-import type { ViewMode } from '../../types/api.types';
+import { Button } from '../Button';
+import type { ExplorerTopbarActionsProps } from './ExplorerTopbarActions.types';
 import styles from './ExplorerTopbarActions.module.scss';
-
-interface ExplorerTopbarActionsProps {
-  viewMode: ViewMode;
-  onViewChange: (mode: ViewMode) => void;
-  onUpload: () => void;
-}
 
 export const ExplorerTopbarActions = ({
   viewMode,
