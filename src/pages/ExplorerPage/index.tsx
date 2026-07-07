@@ -1,9 +1,10 @@
 import { useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { HiDownload, HiPencilAlt, HiTrash } from 'react-icons/hi';
+import { HiDownload, HiPencilAlt, HiShare, HiTrash } from 'react-icons/hi';
 import { Spinner } from '../../components/Spinner';
 import { DriveContent } from '../../components/DriveContent';
 import { CreateFolderModal, DeleteModal, RenameModal } from '../../components/Modal';
+import { SharePanel } from '../../components/SharePanel';
 import { ContextMenu } from '../../components/ContextMenu';
 import { useFolders } from '../../hooks/useFolders';
 import { useFiles } from '../../hooks/useFiles';
@@ -19,6 +20,7 @@ type ModalState =
   | { type: 'rename-folder'; id: string; name: string }
   | { type: 'delete-folder'; id: string; name: string }
   | { type: 'delete-file'; id: string; name: string }
+  | { type: 'share-file'; id: string; name: string }
   | null;
 
 type ContextMenuState = {
@@ -96,6 +98,11 @@ const ExplorerPage = (): React.JSX.Element => {
 
   const fileMenuItems: MenuItem[] = contextMenu
     ? [
+        {
+          label: 'Compartir',
+          icon: <HiShare />,
+          onClick: () => setModal({ type: 'share-file', id: contextMenu.id, name: contextMenu.name }),
+        },
         {
           label: 'Descargar',
           icon: <HiDownload />,
@@ -182,6 +189,13 @@ const ExplorerPage = (): React.JSX.Element => {
           closeModal();
         }}
         isLoading={modal?.type === 'delete-folder' ? isDeleting : isDeletingFile}
+      />
+
+      <SharePanel
+        isOpen={modal?.type === 'share-file'}
+        onClose={closeModal}
+        fileId={modal?.type === 'share-file' ? modal.id : ''}
+        fileName={modal?.type === 'share-file' ? modal.name : ''}
       />
     </>
   );

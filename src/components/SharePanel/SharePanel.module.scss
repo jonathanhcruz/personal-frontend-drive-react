@@ -1,0 +1,157 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.share-panel {
+  &__filename {
+    font-size: $text-sm;
+    color: $text-secondary;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+  }
+
+  &__section-label {
+    font-size: $text-xs;
+    font-weight: 600;
+    color: $text-muted;
+    letter-spacing: 0.06em;
+  }
+
+  &__empty {
+    font-size: $text-sm;
+    color: $text-muted;
+    margin: 0;
+    padding: $space-3 0;
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $space-3;
+    padding: $space-3;
+    background-color: $bg-elevated;
+    border: 1px solid $border-subtle;
+    border-radius: $radius-md;
+  }
+
+  &__item-meta {
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+    font-size: $text-sm;
+    color: $text-primary;
+    min-width: 0;
+
+    span:last-child {
+      font-size: $text-xs;
+      color: $text-secondary;
+    }
+  }
+
+  &__item-expiry {
+    font-size: $text-xs;
+    color: $text-secondary;
+  }
+
+  &__revoke-btn {
+    @include flex-center;
+    @include focus-ring;
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    color: $text-secondary;
+    cursor: pointer;
+    padding: $space-1;
+    border-radius: $radius-sm;
+    font-size: $text-lg;
+    line-height: 0;
+    transition: color $transition-fast, background-color $transition-fast;
+
+    &:hover:not(:disabled) {
+      color: $danger;
+      background-color: $danger-muted;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+
+  &__new-link {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+    padding: $space-3;
+    background-color: $accent-muted;
+    border: 1px solid rgba($accent, 0.25);
+    border-radius: $radius-md;
+  }
+
+  &__new-link-row {
+    display: flex;
+    gap: $space-2;
+    align-items: center;
+  }
+
+  &__new-link-input {
+    flex: 1;
+    min-width: 0;
+    background: $bg-elevated;
+    border: 1px solid $border;
+    border-radius: $radius-sm;
+    padding: $space-2 $space-3;
+    color: $text-primary;
+    font-size: $text-sm;
+    font-family: $font-mono;
+    outline: none;
+
+    &:focus {
+      border-color: $accent;
+    }
+  }
+
+  &__copy-btn {
+    @include flex-center;
+    @include focus-ring;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+    background: $accent;
+    border: none;
+    border-radius: $radius-sm;
+    color: $bg-base;
+    cursor: pointer;
+    font-size: $text-sm;
+    font-weight: 600;
+    padding: $space-2 $space-3;
+    white-space: nowrap;
+    transition: background-color $transition-fast;
+
+    svg {
+      font-size: $text-md;
+    }
+
+    &:hover {
+      background-color: $accent-hover;
+    }
+  }
+}
