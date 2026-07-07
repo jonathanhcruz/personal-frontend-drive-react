@@ -4,9 +4,12 @@
 
 ```
 src/
+  layouts/
+    DashboardLayout/  ✅  DashboardLayout.tsx · TopbarContext.tsx · DashboardLayout.module.scss
   components/
     Sidebar/          ✅  constants/index.ts (NAV_ITEMS)
-    DriveTopbar/      ✅
+    AppTopbar/        ✅  slots left/right · search fijo · avatar fijo · BEM .app-topbar
+    DriveTopbar/      ⚠️  pendiente de borrar (reemplazado por AppTopbar)
     DriveContent/     ✅
     FolderItem/       ✅  constants/index.ts (futuro)
     FileItem/         ✅  constants/index.ts (EXTENSION_COLORS)
@@ -15,9 +18,12 @@ src/
     UploadPanel/      ⏳
     SharePanel/       ⏳
     MetadataPanel/    ⏳
+  hooks/
+    useTopbar.ts      ✅  inyecta TopbarConfig en el layout vía useLayoutEffect
   pages/
     LoginPage/        ✅  index.tsx
-    ExplorerPage/     ✅  index.tsx
+    ExplorerPage/     ✅  index.tsx · BreadcrumbNav.tsx · ExplorerTopbarActions.tsx
+    SharedPage/       ⏳  placeholder listo · contenido real pendiente
 ```
 
 ## Layout general
@@ -143,6 +149,8 @@ interface DriveContentProps {
 ---
 
 ## Siguientes pasos
-1. `UploadPanel` ⏳ — overlay progreso de subida
-2. `SharePanel` ⏳ — gestión de enlaces (usa `useShare`)
-3. `MetadataPanel` ⏳ — metadatos de archivo/carpeta
+1. Borrar `DriveTopbar/` — confirmar visualmente primero ⚠️
+2. `SharedPage` ⏳ — contenido real (requiere definir endpoint backend)
+3. `UploadPanel` ⏳ — overlay progreso de subida
+4. `SharePanel` ⏳ — gestión de enlaces (usa `useShare`)
+5. `MetadataPanel` ⏳ — metadatos de archivo/carpeta

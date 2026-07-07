@@ -1,6 +1,6 @@
 # Estado de construcción
 
-_Última actualización: 2026-07-01_
+_Última actualización: 2026-07-07_
 
 ## Completado ✅
 
@@ -10,7 +10,7 @@ _Última actualización: 2026-07-01_
 - `src/lib/queryClient.ts` — QueryClient (staleTime 30s, retry 1, no refetchOnWindowFocus)
 - `src/lib/queryKeys.ts` — query keys centralizadas
 - `src/types/api.types/` — login.ts, files.ts, folders.ts, index.ts
-- `src/routes/router.tsx` — rutas `/login`, `/`, `/drive`, `/drive/:folderId`
+- `src/routes/router.tsx` — rutas `/login`, `/`, `/drive`, `/drive/:folderId`, `/shared`; layout route con `DashboardLayout`
 - `src/routes/ProtectedRoute.tsx`
 
 ### Servicios
@@ -24,17 +24,17 @@ _Última actualización: 2026-07-01_
 - `src/hooks/useFolders.ts` — query contenido unificado (`FolderContents` tanto en raíz como subfolder) + breadcrumb + mutations create/rename/delete; `currentFolder` disponible en raíz
 - `src/hooks/useFiles.ts` — mutations upload/delete/download; invalida queryKeys.folders al mutar
 - `src/hooks/useShare.ts` — query listShares + mutations createShare/revokeShare; `newShare` expone último token
+- `src/hooks/useTopbar.ts` — hook que usan las páginas para inyectar `left`/`right` en el topbar del layout vía `TopbarContext`; usa `useLayoutEffect` para evitar flash visual
 
-### Componentes globales
-- `src/components/Button` — variantes primary/secondary/ghost/danger · tamaños sm/md/lg · neon glow en primary · loading state
-- `src/components/Input` (TextInput) — toggle contraseña · iconStart/iconEnd · error state · sizes
-- `src/components/Spinner` — `<span role="status">` · tamaños sm/md/lg
-- `src/components/Logo` — solo la órbita · tamaños sm/md/lg via CSS custom properties
+### Layout — DashboardLayout
+- `src/layouts/DashboardLayout/TopbarContext.tsx` — `TopbarConfig { left, right? }` · `TopbarProvider` · `useTopbarContext`; patrón provider+shell para evitar consumir el context en el mismo componente que lo provee
+- `src/layouts/DashboardLayout/DashboardLayout.tsx` — `TopbarProvider` wrappea `LayoutShell`; shell renderiza `<Sidebar>` + `<AppTopbar>` + `<Outlet>`
+- `src/components/AppTopbar` — topbar genérico con slots `left`/`right` como `ReactNode`; search y avatar siempre fijos; BEM `.app-topbar`
 
 ### Dashboard — shell
 - `src/components/Sidebar` — Logo sm + brand PRIVATE/DRIVE + NavLinks + barra de almacenamiento (hardcoded); NAV_ITEMS en `Sidebar/constants/index.ts`
-- `src/components/DriveTopbar` — breadcrumb `›` + search disabled + toggle grid/list + botón Subir + avatar JL
 - `src/components/DriveContent` — heading con título/meta + "Nueva carpeta" + sección CARPETAS + sección ARCHIVOS + estado vacío
+- `src/components/DriveTopbar` — **pendiente de borrar**; reemplazado por `AppTopbar` + slots internos de `ExplorerPage`
 
 ### Componentes de contenido
 - `src/components/FolderItem` — icono HiFolder (accent) + nombre truncado + botón HiDotsVertical (hover) · prop `viewMode` · `--list` modifier
@@ -53,22 +53,22 @@ _Última actualización: 2026-07-01_
 
 ### Páginas
 - `src/pages/LoginPage/index.tsx` — diseño completo según PDF
-- `src/pages/ExplorerPage/index.tsx` — `ModalState` + `ContextMenuState` discriminated unions; todos los callbacks conectados; `activeFolderId = currentFolder?.id` para create/upload
+- `src/pages/ExplorerPage/index.tsx` — usa `useTopbar` para inyectar `BreadcrumbNav` + `ExplorerTopbarActions`; ya no renderiza `<Sidebar>` ni `<DriveTopbar>`; solo contenido + modals + context menu
+  - `BreadcrumbNav.tsx` — breadcrumb con `<Link>` funcionales; root → `/drive`; intermedios → `/drive/:id`; último item sin link · BEM `.breadcrumb-nav`
+  - `ExplorerTopbarActions.tsx` — view-toggle (grid/list) + botón Subir · BEM `.explorer-topbar-actions`
+- `src/pages/SharedPage/index.tsx` — placeholder; usa `useTopbar({ left: <span>Compartidos</span> })`
 
 ---
 
 ## Pendiente ⏳
 
-### Arquitectura — layout compartido
-- `DashboardLayout` — Sidebar + AppTopbar con slots (TopbarContext) + Outlet; reemplaza repetición en cada página
-- `AppTopbar` — topbar genérico con `left`/`right` slots; reemplaza `DriveTopbar` hardcodeado
-- `router.tsx` — agregar layout route + ruta `/shared`
+### Limpieza post-refactor
+- Borrar `src/components/DriveTopbar/` — reemplazado por `AppTopbar`; pendiente confirmación visual
 
-### Breadcrumb — navegación funcional
-- `DriveTopbar` (o futuro `AppTopbar`) — items del breadcrumb como `<Link to="/drive/:id">` en lugar de texto plano; root → `/drive`, subfolder → `/drive/:folderId`; último item sin link
-
-### Páginas nuevas
-- `SharedPage` — vista de archivos compartidos; mismo shell (DashboardLayout) distinto contenido
+### SharedPage — contenido real
+- Definir qué muestra (archivos compartidos por el usuario, o compartidos con el usuario)
+- Conectar con backend — puede requerir endpoint nuevo `GET /api/shares` si no existe
+- Implementar `SharedContent` — lista de archivos con sus tokens activos
 
 ### Paneles del dashboard
 - `UploadPanel` — overlay "Subiendo 2 archivos..." con progreso
@@ -82,6 +82,7 @@ _Última actualización: 2026-07-01_
 - **`currentFolder` nulo en raíz** — `useFolders` ignoraba el `folder` del response en raíz; ahora unificado con subfolder
 - **`parentId: null` al crear en raíz** — ExplorerPage ahora deriva `activeFolderId = currentFolder?.id` y lo usa en `createFolder` y `useFiles`
 - **DeleteModal no cerraba** — `onDelete` no llamaba `closeModal()`; corregido en ExplorerPage
+- **Breadcrumb no navegable** — items eran `<span>` sin link; reemplazados por `<Link>` en `BreadcrumbNav`
 
 ## Decisiones tomadas
 - **Badge:** pospuesto — se extrae solo si el patrón se repite en FileItem/MetadataPanel
@@ -90,3 +91,5 @@ _Última actualización: 2026-07-01_
 - **Avatar:** mock "JL" por ahora, se conecta con datos reales del usuario después
 - **Búsqueda:** input deshabilitado visualmente, funcionalidad no disponible aún
 - **Streaming:** `downloadFile` usa Blob — deuda técnica para archivos grandes, fase futura
+- **TopbarContext scope:** context scoped al `DashboardLayout` (no global) — solo páginas dentro del layout lo necesitan; Redux y context global descartados por overkill
+- **AppTopbar:** presentacional puro (recibe props), no consume el context directamente — `LayoutShell` es el intermediario
