@@ -6,5 +6,6 @@ export const queryKeys = {
   },
   shares: {
     list: (fileId: string) => ['shares', fileId] as const,
+    all: ['shares', 'all'] as const,
   },
 } as const;

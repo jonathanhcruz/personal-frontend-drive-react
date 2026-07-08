@@ -3,13 +3,11 @@ import { HiClipboardCopy, HiTrash } from 'react-icons/hi';
 import { Modal } from '../Modal/Modal';
 import { Button } from '../Button';
 import { useShare } from '../../hooks/useShare';
+import { getPublicDownloadUrl } from '../../services/share.service';
 import type { SharePanelProps } from './SharePanel.types';
 import styles from './SharePanel.module.scss';
 
 const fmt = new Intl.DateTimeFormat('es', { day: '2-digit', month: 'short', year: 'numeric' });
-
-const buildShareUrl = (token: string): string =>
-  `${import.meta.env.VITE_BACKEND_URL as string}/api/files/share/${token}`;
 
 export const SharePanel = ({ isOpen, onClose, fileId, fileName }: SharePanelProps): React.JSX.Element => {
   const { shares, isLoadingShares, createShare, isCreatingShare, revokeShare, isRevoking } =
@@ -25,7 +23,7 @@ export const SharePanel = ({ isOpen, onClose, fileId, fileName }: SharePanelProp
 
   const handleCreate = (): void => {
     createShare(undefined, {
-      onSuccess: (data) => setCreatedUrl(buildShareUrl(data.token)),
+      onSuccess: (data) => setCreatedUrl(getPublicDownloadUrl(data.token)),
     });
   };
 

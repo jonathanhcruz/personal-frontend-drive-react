@@ -20,3 +20,10 @@ export interface CreatedShareDto {
   token: string;
   expiresAt: string;
 }
+
+export interface ShareWithFile {
+  id: string;
+  fileName: string;
+  expiresAt: string;
+  createdAt?: string;
+}

@@ -1,5 +1,5 @@
 import { axiosInstance } from '../lib/axios';
-import type { ApiResponse, CreatedShareDto, FilePublicDto, ShareTokenDto } from '../types/api.types';
+import type { ApiResponse, CreatedShareDto, FilePublicDto, ShareTokenDto, ShareWithFile } from '../types/api.types';
 
 export const uploadFile = async (
   folderId: string,
@@ -62,4 +62,9 @@ export const createShare = async (fileId: string): Promise<CreatedShareDto> => {
 
 export const revokeShare = async (tokenId: string): Promise<void> => {
   await axiosInstance.delete(`/api/files/share/${tokenId}`);
+};
+
+export const listAllShares = async (): Promise<ShareWithFile[]> => {
+  const { data } = await axiosInstance.get<ApiResponse<ShareWithFile[]>>('/api/files/shares');
+  return data.data;
 };

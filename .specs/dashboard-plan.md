@@ -22,17 +22,19 @@ src/
     SharePanel/       ✅  modal compartir · useShare interno · copiar token · revocar enlaces
     Sidebar/          ✅  NAV_ITEMS en constants/
     Spinner/          ✅  sm/md/lg · primary/muted
-    UploadPanel/      🏗️  scaffold vacío — pendiente implementar
+    UploadPanel/      ✅  overlay fixed bottom-right · cola múltiple · progreso real Axios · done/error por archivo
   hooks/
     useAuth.ts        ✅
     useFiles.ts       ✅
     useFolders.ts     ✅
     useShare.ts       ✅
     useTopbar.ts      ✅
+    useUploadQueue.ts ✅  cola de uploads con progreso · distingue raíz vs. subcarpeta para invalidación
+    useSharedFiles.ts ✅  query listAllShares + mutation revokeShare con invalidación
   pages/
     LoginPage/        ✅
     ExplorerPage/     ✅  solo index.tsx — BreadcrumbNav y ExplorerTopbarActions en components/
-    SharedPage/       ⏳  placeholder · contenido real pendiente
+    SharedPage/       ✅  lista real de shares · copiar enlace · revocar
   services/
     auth.service.ts   ✅
     files.service.ts  ✅  incluye share endpoints
@@ -131,8 +133,25 @@ Modal para compartir archivos individuales.
 
 ---
 
+## Fase 6 — `UploadPanel` ✅
+Overlay de progreso de subida de archivos.
+- `useUploadQueue` — cola independiente; `enqueue(files, actualFolderId, paramFolderId?)` distingue raíz vs. subcarpeta para invalidar la query correcta
+- `uploadFile` en `files.service.ts` acepta `onUploadProgress` → progreso real vía Axios
+- Overlay fixed bottom-right; lista scrolleable max 260px
+- Header dinámico según estado de cola
+- `<input type="file" multiple>` en ExplorerPage — selección múltiple
+
+---
+
+## Fase 7 — `SharedPage` ✅
+Lista de todos los shares activos del usuario autenticado.
+- `GET /api/files/shares` → `listAllShares()` en `files.service.ts` → `useSharedFiles` hook
+- `ShareWithFile` tipo en `api.types/files.ts` (extiende share con `fileName`)
+- `queryKeys.shares.all = ['shares', 'all']`
+- Cada item: nombre de archivo · fecha creación · fecha expiración · botón copiar enlace (feedback "Copiado" 2s) · botón revocar (papelera, deshabilita durante mutación)
+- URL pública: `getPublicDownloadUrl(token)` → `/api/share/${token}` — confirma endpoint público separado del autenticado
+
+---
+
 ## Siguientes pasos
-1. `SharedPage` ⏳ — contenido real (definir endpoint backend, implementar `SharedContent`)
-2. `UploadPanel` ⏳ — overlay progreso de subida (scaffold existe)
-3. `MetadataPanel` ⏳ — metadatos de archivo/carpeta (scaffold existe)
-4. ⚠️ Verificar URL pública de share (`/api/share/` vs. `/api/files/share/`)
+1. `MetadataPanel` ⏳ — metadatos de archivo/carpeta (scaffold existe)
