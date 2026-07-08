@@ -50,3 +50,12 @@
   backdrop-filter: blur(2px);
   z-index: $z-overlay;
 }
+
+@mixin no-select {
+  -webkit-touch-callout: none; 
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+}

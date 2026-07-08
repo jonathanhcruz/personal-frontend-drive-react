@@ -1,13 +1,23 @@
 import { axiosInstance } from '../lib/axios';
 import type { ApiResponse, CreatedShareDto, FilePublicDto, ShareTokenDto } from '../types/api.types';
 
-export const uploadFile = async (folderId: string, file: File): Promise<FilePublicDto> => {
+export const uploadFile = async (
+  folderId: string,
+  file: File,
+  onUploadProgress?: (percent: number) => void,
+): Promise<FilePublicDto> => {
   const form = new FormData();
   form.append('file', file);
   const { data } = await axiosInstance.post<ApiResponse<FilePublicDto>>(
     '/api/files/upload',
     form,
-    { params: { folderId }, headers: { 'Content-Type': 'multipart/form-data' } },
+    {
+      params: { folderId },
+      headers: { 'Content-Type': 'multipart/form-data' },
+      onUploadProgress: (e) => {
+        if (e.total) onUploadProgress?.(Math.round((e.loaded / e.total) * 100));
+      },
+    },
   );
   return data.data;
 };

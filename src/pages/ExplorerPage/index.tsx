@@ -8,6 +8,8 @@ import { SharePanel } from '../../components/SharePanel';
 import { ContextMenu } from '../../components/ContextMenu';
 import { useFolders } from '../../hooks/useFolders';
 import { useFiles } from '../../hooks/useFiles';
+import { useUploadQueue } from '../../hooks/useUploadQueue';
+import { UploadPanel } from '../../components/UploadPanel';
 import { useTopbar } from '../../hooks/useTopbar';
 import type { ViewMode } from '../../types/api.types';
 import type { MenuItem } from '../../components/ContextMenu';
@@ -53,14 +55,14 @@ const ExplorerPage = (): React.JSX.Element => {
 
   const activeFolderId = currentFolder?.id;
 
-  const { uploadFile, deleteFile, isDeletingFile, downloadFile } = useFiles(activeFolderId);
+  const { deleteFile, isDeletingFile, downloadFile } = useFiles(folderId);
+  const { items: uploadItems, enqueue, clearCompleted } = useUploadQueue();
 
   const handleUpload = (): void => fileInputRef.current?.click();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const file = e.target.files?.[0];
-    if (file) {
-      uploadFile(file);
+    if (e.target.files && e.target.files.length > 0 && activeFolderId) {
+      enqueue(e.target.files, activeFolderId, folderId);
       e.target.value = '';
     }
   };
@@ -150,6 +152,7 @@ const ExplorerPage = (): React.JSX.Element => {
       <input
         ref={fileInputRef}
         type="file"
+        multiple
         className={styles['explorer__file-input']}
         onChange={handleFileChange}
       />
@@ -189,6 +192,12 @@ const ExplorerPage = (): React.JSX.Element => {
           closeModal();
         }}
         isLoading={modal?.type === 'delete-folder' ? isDeleting : isDeletingFile}
+      />
+
+      <UploadPanel
+        items={uploadItems}
+        isVisible={uploadItems.length > 0}
+        onClose={clearCompleted}
       />
 
       <SharePanel
