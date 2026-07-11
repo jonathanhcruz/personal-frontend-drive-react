@@ -11,6 +11,23 @@
   border-right: 1px solid $border-subtle;
   padding: $space-4 $space-3;
   overflow: hidden;
+  transition: transform $transition-fast;
+
+  @media (max-width: 768px) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100dvh;
+    z-index: 200;
+    transform: translateX(-100%);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.4);
+  }
+
+  &--open {
+    @media (max-width: 768px) {
+      transform: translateX(0);
+    }
+  }
 
   &__brand {
     display: flex;
@@ -124,5 +141,29 @@
     font-family: $font-mono;
     font-size: $text-xs;
     color: $text-muted;
+  }
+
+  &__logout {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    padding: $space-2 $space-3;
+    margin-top: $space-2;
+    border-radius: $radius-sm;
+    font-size: $text-sm;
+    color: $text-secondary;
+    transition: background-color $transition-fast, color $transition-fast;
+    width: 100%;
+    text-align: left;
+
+    &:hover:not(:disabled) {
+      background-color: $danger-muted;
+      color: $danger;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
   }
 }

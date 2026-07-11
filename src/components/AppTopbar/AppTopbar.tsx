@@ -1,10 +1,20 @@
-import { HiSearch } from 'react-icons/hi';
+import { HiMenu, HiSearch } from 'react-icons/hi';
 import styles from './AppTopbar.module.scss';
 import type { AppTopbarProps } from './AppTopbar.types';
 
-export const AppTopbar = ({ left, right }: AppTopbarProps): React.JSX.Element => {
+export const AppTopbar = ({ left, right, onMenuToggle }: AppTopbarProps): React.JSX.Element => {
   return (
     <header className={styles['app-topbar']}>
+      {onMenuToggle && (
+        <button
+          type="button"
+          className={styles['app-topbar__menu-btn']}
+          onClick={onMenuToggle}
+          aria-label="Abrir menú"
+        >
+          <HiMenu />
+        </button>
+      )}
       <div className={styles['app-topbar__left']}>{left}</div>
 
       <div className={styles['app-topbar__search']}>
@@ -19,7 +29,6 @@ export const AppTopbar = ({ left, right }: AppTopbarProps): React.JSX.Element =>
 
       <div className={styles['app-topbar__right']}>
         {right}
-        <div className={styles['app-topbar__avatar']}>JL</div>
       </div>
     </header>
   );

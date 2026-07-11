@@ -1,13 +1,25 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import styles from './ContextMenu.module.scss';
 import type { ContextMenuProps } from './ContextMenu.types';
 
 export const ContextMenu = ({ isOpen, onClose, position, items }: ContextMenuProps): React.JSX.Element | null => {
   const menuRef = useRef<HTMLDivElement>(null);
+  const [coords, setCoords] = useState({ x: position.x, y: position.y, visible: false });
+
+  useLayoutEffect(() => {
+    if (!isOpen || !menuRef.current) return;
+    const { width, height } = menuRef.current.getBoundingClientRect();
+    const x = position.x + width > window.innerWidth ? position.x - width : position.x;
+    const y = position.y + height > window.innerHeight ? position.y - height : position.y;
+    setCoords({ x, y, visible: true });
+  }, [isOpen, position.x, position.y]);
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen) {
+      setCoords((prev) => ({ ...prev, visible: false }));
+      return;
+    }
 
     const handleKey = (e: KeyboardEvent): void => {
       if (e.key === 'Escape') onClose();
@@ -30,7 +42,7 @@ export const ContextMenu = ({ isOpen, onClose, position, items }: ContextMenuPro
     <div
       ref={menuRef}
       className={styles['context-menu']}
-      style={{ top: position.y, left: position.x }}
+      style={{ top: coords.y, left: coords.x, visibility: coords.visible ? 'visible' : 'hidden' }}
       role="menu"
     >
       {items.map((item) => (

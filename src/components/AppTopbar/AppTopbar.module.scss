@@ -11,11 +11,35 @@
   background-color: $bg-surface;
   border-bottom: 1px solid $border-subtle;
 
+  &__menu-btn {
+    @include flex-center;
+    width: 36px;
+    height: 36px;
+    border-radius: $radius-sm;
+    color: $text-secondary;
+    font-size: 20px;
+    flex-shrink: 0;
+    display: none;
+
+    &:hover {
+      background-color: $bg-elevated;
+      color: $text-primary;
+    }
+
+    @media (max-width: 768px) {
+      display: flex;
+    }
+  }
+
   &__left {
     display: flex;
     align-items: center;
     gap: $space-1;
     flex-shrink: 0;
+
+    @media (max-width: 768px) {
+      display: none;
+    }
   }
 
   &__search {
@@ -23,6 +47,10 @@
     flex: 1;
     max-width: 320px;
     margin: 0 auto;
+
+    @media (max-width: 768px) {
+      display: none;
+    }
   }
 
   &__search-icon {
@@ -58,20 +86,5 @@
     gap: $space-3;
     margin-left: auto;
     flex-shrink: 0;
-  }
-
-  &__avatar {
-    @include flex-center;
-    width: 32px;
-    height: 32px;
-    border-radius: $radius-full;
-    background-color: $accent-muted;
-    border: 1px solid $accent;
-    font-size: $text-xs;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    color: $accent;
-    flex-shrink: 0;
-    cursor: pointer;
   }
 }

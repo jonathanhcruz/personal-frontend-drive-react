@@ -1,1 +1,4 @@
-export interface SidebarProps {}
+export interface SidebarProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}

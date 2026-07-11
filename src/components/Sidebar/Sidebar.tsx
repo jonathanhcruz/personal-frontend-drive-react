@@ -1,12 +1,16 @@
 import { NavLink } from 'react-router-dom';
+import { HiLogout } from 'react-icons/hi';
 import { Logo } from '../Logo';
+import { useAuth } from '../../hooks/useAuth';
 import { NAV_ITEMS } from './constants';
 import styles from './Sidebar.module.scss';
 import type { SidebarProps } from './Sidebar.types';
 
-export const Sidebar = (_props: SidebarProps): React.JSX.Element => {
+export const Sidebar = ({ isOpen, onClose }: SidebarProps): React.JSX.Element => {
+  const { logout, isLoggingOut } = useAuth();
+
   return (
-    <aside className={styles['sidebar']}>
+    <aside className={[styles['sidebar'], isOpen ? styles['sidebar--open'] : ''].filter(Boolean).join(' ')}>
       <div className={styles['sidebar__brand']}>
         <Logo size="sm" />
         <div className={styles['sidebar__brand-text']}>
@@ -46,6 +50,16 @@ export const Sidebar = (_props: SidebarProps): React.JSX.Element => {
         </div>
         <span className={styles['sidebar__storage-info']}>18.4 GB / 30 GB</span>
       </div>
+
+      <button
+        type="button"
+        className={styles['sidebar__logout']}
+        onClick={() => { logout(); onClose?.(); }}
+        disabled={isLoggingOut}
+      >
+        <span className={styles['sidebar__nav-icon']}><HiLogout /></span>
+        Cerrar sesión
+      </button>
     </aside>
   );
 };

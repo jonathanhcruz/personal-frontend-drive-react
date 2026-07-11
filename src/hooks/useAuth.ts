@@ -29,6 +29,7 @@ export const useAuth = () => {
     login: loginMutation.mutate,
     logout: logoutMutation.mutate,
     isLoggingIn: loginMutation.isPending,
+    isLoggingOut: logoutMutation.isPending,
     loginError: loginMutation.error,
   };
 };

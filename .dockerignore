@@ -1,0 +1,9 @@
+node_modules
+dist
+.git
+.env
+.env.example
+.spec
+.specs
+.claude
+README.md
