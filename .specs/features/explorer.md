@@ -46,6 +46,14 @@ Ambas rutas usan el mismo componente `ExplorerPage`. La diferencia es si hay `fo
 - Se cierra al hacer click fuera o con Escape
 - Items configurables según tipo (carpeta vs archivo)
 
+### `FolderPickerModal`
+- Picker de carpeta destino para mover archivos y carpetas
+- Navegación lazy nivel por nivel: `listRoot()` al abrir, `getFolderContents(id)` al navegar
+- `→` navega a subcarpeta con `hasChildren = true`; `← Atrás` sube un nivel
+- "Mi Drive (raíz)" siempre visible como primera opción (destino `null`)
+- `excludeId` oculta la carpeta siendo movida (cycle prevention)
+- Botón "Mover" habilitado solo tras seleccionar destino
+
 ### `MetadataPanel`
 - Modal/drawer que muestra detalles de un archivo
 - Solo archivos, no carpetas
@@ -108,19 +116,22 @@ Solo se activa cuando MetadataPanel está abierto
 
 ### `folders.service.ts`
 ```typescript
-getRootFolders(): Promise<FolderContents>
+listRoot(): Promise<FolderDto[]>                        // GET /api/folders — array directo
 getFolderContents(id: string): Promise<FolderContents>
 getBreadcrumb(id: string): Promise<BreadcrumbItem[]>
-createFolder(name: string, parentId?: string): Promise<Folder>
-renameFolder(id: string, name: string): Promise<Folder>
+createFolder(dto: CreateFolderDto): Promise<FolderDto>
+renameFolder(id: string, dto: RenameFolderDto): Promise<FolderDto>
+moveFolder(id: string, dto: MoveFolderDto): Promise<FolderDto>   // targetParentId: null → raíz
 deleteFolder(id: string, recursive?: boolean): Promise<void>
 ```
 
 ### `files.service.ts`
 ```typescript
-getFileMetadata(id: string): Promise<File>
+getFileMetadata(id: string): Promise<FilePublicDto>
 deleteFile(id: string): Promise<void>
-downloadFile(id: string): void   // abre GET /api/files/:id/download en nueva pestaña
+downloadFile(id: string, name: string): Promise<void>   // Blob download
+renameFile(id: string, dto: RenameFileDto): Promise<FilePublicDto>
+moveFile(id: string, dto: MoveFileDto): Promise<FilePublicDto>   // targetFolderId: null → raíz
 ```
 
 ---
@@ -149,15 +160,17 @@ Click carpeta "Proyectos"
 ### Carpeta
 | Acción | Comportamiento |
 |---|---|
-| Renombrar | Abre input inline o modal con el nombre actual |
-| Eliminar | Confirm dialog → si tiene contenido, incluye aviso de delete recursivo |
+| Renombrar | Abre `RenameModal` con el nombre actual |
+| Mover a... | Abre `FolderPickerModal`; carpeta origen excluida con `excludeId` |
+| Eliminar | Confirm dialog → delete recursivo |
 
 ### Archivo
 | Acción | Comportamiento |
 |---|---|
-| Descargar | Llama `files.service.downloadFile(id)` → nueva pestaña con el stream |
+| Renombrar | Abre `RenameModal` con el nombre actual |
+| Mover a... | Abre `FolderPickerModal` |
 | Compartir | Abre `SharePanel` (ver feature share.md) |
-| Ver detalles | Abre `MetadataPanel` con datos de `GET /api/files/:id` |
+| Descargar | `downloadFile(id, name)` → Blob download |
 | Eliminar | Confirm dialog → DELETE /api/files/:id → refresca grilla |
 
 ---
@@ -176,12 +189,15 @@ Click carpeta "Proyectos"
 
 | Método | Ruta | Cuándo |
 |---|---|---|
-| GET | `/api/folders` | Carga raíz |
-| GET | `/api/folders/:id` | Carga carpeta |
+| GET | `/api/folders` | Carga raíz → `FolderDto[]` |
+| GET | `/api/folders/:id` | Carga carpeta → `FolderContents` |
 | GET | `/api/folders/:id/breadcrumb` | Breadcrumb |
 | POST | `/api/folders` | Crear carpeta |
 | PATCH | `/api/folders/:id` | Renombrar carpeta |
+| PATCH | `/api/folders/:id/move` | Mover carpeta |
 | DELETE | `/api/folders/:id` | Eliminar carpeta |
 | GET | `/api/files/:id` | Metadata (MetadataPanel) |
 | GET | `/api/files/:id/download` | Descarga |
+| PATCH | `/api/files/:id` | Renombrar archivo |
+| PATCH | `/api/files/:id/move` | Mover archivo |
 | DELETE | `/api/files/:id` | Eliminar archivo |
