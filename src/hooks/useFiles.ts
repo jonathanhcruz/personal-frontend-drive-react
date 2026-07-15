@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   deleteFile as deleteFileService,
   downloadFile as downloadFileService,
+  renameFile as renameFileService,
   uploadFile as uploadFileService,
 } from '../services/files.service';
 import { queryKeys } from '../lib/queryKeys';
@@ -30,6 +31,12 @@ export const useFiles = (folderId?: string) => {
       downloadFileService(id, name),
   });
 
+  const { mutate: renameFile, isPending: isRenamingFile } = useMutation({
+    mutationFn: ({ id, name }: { id: string; name: string }) =>
+      renameFileService(id, { name }),
+    onSuccess: invalidateContent,
+  });
+
   return {
     uploadFile,
     isUploading,
@@ -38,5 +45,7 @@ export const useFiles = (folderId?: string) => {
     isDeletingFile,
     downloadFile,
     isDownloading,
+    renameFile,
+    isRenamingFile,
   };
 };

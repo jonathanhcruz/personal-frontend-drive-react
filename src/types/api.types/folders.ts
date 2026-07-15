@@ -2,6 +2,7 @@ export interface FolderDto {
   id: string;
   name: string;
   parentId: string | null;
+  hasChildren: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -32,4 +33,8 @@ export interface CreateFolderDto {
 
 export interface RenameFolderDto {
   name: string;
+}
+
+export interface MoveFolderDto {
+  targetParentId: string | null;
 }

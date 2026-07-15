@@ -20,6 +20,7 @@ import styles from './ExplorerPage.module.scss';
 type ModalState =
   | { type: 'create-folder' }
   | { type: 'rename-folder'; id: string; name: string }
+  | { type: 'rename-file'; id: string; name: string }
   | { type: 'delete-folder'; id: string; name: string }
   | { type: 'delete-file'; id: string; name: string }
   | { type: 'share-file'; id: string; name: string }
@@ -55,7 +56,7 @@ const ExplorerPage = (): React.JSX.Element => {
 
   const activeFolderId = currentFolder?.id;
 
-  const { deleteFile, isDeletingFile, downloadFile } = useFiles(folderId);
+  const { deleteFile, isDeletingFile, downloadFile, renameFile, isRenamingFile } = useFiles(folderId);
   const { items: uploadItems, enqueue, clearCompleted } = useUploadQueue();
 
   const handleUpload = (): void => fileInputRef.current?.click();
@@ -100,6 +101,11 @@ const ExplorerPage = (): React.JSX.Element => {
 
   const fileMenuItems: MenuItem[] = contextMenu
     ? [
+        {
+          label: 'Renombrar',
+          icon: <HiPencilAlt />,
+          onClick: () => setModal({ type: 'rename-file', id: contextMenu.id, name: contextMenu.name }),
+        },
         {
           label: 'Compartir',
           icon: <HiShare />,
@@ -179,6 +185,16 @@ const ExplorerPage = (): React.JSX.Element => {
           if (modal?.type === 'rename-folder') renameFolder({ id: modal.id, name });
         }}
         isLoading={isRenaming}
+      />
+
+      <RenameModal
+        isOpen={modal?.type === 'rename-file'}
+        onClose={closeModal}
+        currentName={modal?.type === 'rename-file' ? modal.name : ''}
+        onRename={(name) => {
+          if (modal?.type === 'rename-file') renameFile({ id: modal.id, name });
+        }}
+        isLoading={isRenamingFile}
       />
 
       <DeleteModal

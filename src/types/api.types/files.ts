@@ -27,3 +27,11 @@ export interface ShareWithFile {
   expiresAt: string;
   createdAt?: string;
 }
+
+export interface RenameFileDto {
+  name: string;
+}
+
+export interface MoveFileDto {
+  targetFolderId: string;
+}
