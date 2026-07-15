@@ -1,6 +1,6 @@
 # Estado de construcción
 
-_Última actualización: 2026-07-07 (sesión 4)_
+_Última actualización: 2026-07-14 (sesión 5)_
 
 ## Completado ✅
 
@@ -16,8 +16,8 @@ _Última actualización: 2026-07-07 (sesión 4)_
 
 ### Servicios
 - `src/services/auth.service.ts`
-- `src/services/files.service.ts` — upload · list · getById · download · delete + share endpoints (listShares · createShare · revokeShare); `uploadFile` acepta `onUploadProgress?: (percent: number) => void` vía Axios
-- `src/services/folders.service.ts`
+- `src/services/files.service.ts` — upload · list · getById · download · delete · renameFile · moveFile + share endpoints (listShares · createShare · revokeShare); `uploadFile` acepta `onUploadProgress?: (percent: number) => void` vía Axios
+- `src/services/folders.service.ts` — `listRoot` (→ `FolderDto[]`) · `getFolderContents` · `getBreadcrumb` · `createFolder` · `renameFolder` · `moveFolder` · `deleteFolder`
 - `src/services/share.service.ts` — `getPublicDownloadUrl(token)` helper: `${VITE_BACKEND_URL}/api/share/${token}`
 
 ### Hooks
