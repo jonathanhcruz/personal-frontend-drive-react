@@ -5,11 +5,12 @@ import type {
   CreateFolderDto,
   FolderContents,
   FolderDto,
+  MoveFolderDto,
   RenameFolderDto,
 } from '../types/api.types';
 
-export const listRoot = async (): Promise<FolderContents> => {
-  const { data } = await axiosInstance.get<ApiResponse<FolderContents>>('/api/folders');
+export const listRoot = async (): Promise<FolderDto[]> => {
+  const { data } = await axiosInstance.get<ApiResponse<FolderDto[]>>('/api/folders');
   return data.data;
 };
 
@@ -30,6 +31,11 @@ export const createFolder = async (dto: CreateFolderDto): Promise<FolderDto> => 
 
 export const renameFolder = async (id: string, dto: RenameFolderDto): Promise<FolderDto> => {
   const { data } = await axiosInstance.patch<ApiResponse<FolderDto>>(`/api/folders/${id}`, dto);
+  return data.data;
+};
+
+export const moveFolder = async (id: string, dto: MoveFolderDto): Promise<FolderDto> => {
+  const { data } = await axiosInstance.patch<ApiResponse<FolderDto>>(`/api/folders/${id}/move`, dto);
   return data.data;
 };
 

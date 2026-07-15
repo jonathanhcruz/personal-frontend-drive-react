@@ -1,5 +1,5 @@
 import { axiosInstance } from '../lib/axios';
-import type { ApiResponse, CreatedShareDto, FilePublicDto, RenameFileDto, ShareTokenDto, ShareWithFile } from '../types/api.types';
+import type { ApiResponse, CreatedShareDto, FilePublicDto, MoveFileDto, RenameFileDto, ShareTokenDto, ShareWithFile } from '../types/api.types';
 
 export const uploadFile = async (
   folderId: string,
@@ -48,6 +48,11 @@ export const downloadFile = async (id: string, name: string): Promise<void> => {
 
 export const renameFile = async (id: string, dto: RenameFileDto): Promise<FilePublicDto> => {
   const { data } = await axiosInstance.patch<ApiResponse<FilePublicDto>>(`/api/files/${id}`, dto);
+  return data.data;
+};
+
+export const moveFile = async (id: string, dto: MoveFileDto): Promise<FilePublicDto> => {
+  const { data } = await axiosInstance.patch<ApiResponse<FilePublicDto>>(`/api/files/${id}/move`, dto);
   return data.data;
 };
 

@@ -1,9 +1,10 @@
 import { useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { HiDownload, HiPencilAlt, HiShare, HiTrash } from 'react-icons/hi';
+import { HiDownload, HiPencilAlt, HiShare, HiSwitchHorizontal, HiTrash } from 'react-icons/hi';
 import { Spinner } from '../../components/Spinner';
 import { DriveContent } from '../../components/DriveContent';
 import { CreateFolderModal, DeleteModal, RenameModal } from '../../components/Modal';
+import { FolderPickerModal } from '../../components/FolderPickerModal';
 import { SharePanel } from '../../components/SharePanel';
 import { ContextMenu } from '../../components/ContextMenu';
 import { useFolders } from '../../hooks/useFolders';
@@ -21,6 +22,8 @@ type ModalState =
   | { type: 'create-folder' }
   | { type: 'rename-folder'; id: string; name: string }
   | { type: 'rename-file'; id: string; name: string }
+  | { type: 'move-file'; id: string }
+  | { type: 'move-folder'; id: string }
   | { type: 'delete-folder'; id: string; name: string }
   | { type: 'delete-file'; id: string; name: string }
   | { type: 'share-file'; id: string; name: string }
@@ -50,13 +53,15 @@ const ExplorerPage = (): React.JSX.Element => {
     isCreating,
     renameFolder,
     isRenaming,
+    moveFolder,
+    isMovingFolder,
     deleteFolder,
     isDeleting,
   } = useFolders(folderId);
 
   const activeFolderId = currentFolder?.id;
 
-  const { deleteFile, isDeletingFile, downloadFile, renameFile, isRenamingFile } = useFiles(folderId);
+  const { deleteFile, isDeletingFile, downloadFile, renameFile, isRenamingFile, moveFile, isMovingFile } = useFiles(folderId);
   const { items: uploadItems, enqueue, clearCompleted } = useUploadQueue();
 
   const handleUpload = (): void => fileInputRef.current?.click();
@@ -91,6 +96,11 @@ const ExplorerPage = (): React.JSX.Element => {
           onClick: () => setModal({ type: 'rename-folder', id: contextMenu.id, name: contextMenu.name }),
         },
         {
+          label: 'Mover a...',
+          icon: <HiSwitchHorizontal />,
+          onClick: () => setModal({ type: 'move-folder', id: contextMenu.id }),
+        },
+        {
           label: 'Eliminar',
           icon: <HiTrash />,
           variant: 'danger',
@@ -105,6 +115,11 @@ const ExplorerPage = (): React.JSX.Element => {
           label: 'Renombrar',
           icon: <HiPencilAlt />,
           onClick: () => setModal({ type: 'rename-file', id: contextMenu.id, name: contextMenu.name }),
+        },
+        {
+          label: 'Mover a...',
+          icon: <HiSwitchHorizontal />,
+          onClick: () => setModal({ type: 'move-file', id: contextMenu.id }),
         },
         {
           label: 'Compartir',
@@ -221,6 +236,17 @@ const ExplorerPage = (): React.JSX.Element => {
         onClose={closeModal}
         fileId={modal?.type === 'share-file' ? modal.id : ''}
         fileName={modal?.type === 'share-file' ? modal.name : ''}
+      />
+
+      <FolderPickerModal
+        isOpen={modal?.type === 'move-file' || modal?.type === 'move-folder'}
+        onClose={closeModal}
+        excludeId={modal?.type === 'move-folder' ? modal.id : undefined}
+        isLoading={isMovingFile || isMovingFolder}
+        onConfirm={(targetId) => {
+          if (modal?.type === 'move-file') moveFile({ id: modal.id, targetFolderId: targetId });
+          if (modal?.type === 'move-folder') moveFolder({ id: modal.id, targetParentId: targetId });
+        }}
       />
     </>
   );

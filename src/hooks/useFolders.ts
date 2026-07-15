@@ -5,6 +5,7 @@ import {
   getBreadcrumb,
   getFolderContents,
   listRoot,
+  moveFolder as moveFolderService,
   renameFolder as renameFolderService,
 } from '../services/folders.service';
 import type {
@@ -34,6 +35,8 @@ interface FolderMutations {
   isCreating: boolean;
   renameFolder: (payload: { id: string; name: string }) => void;
   isRenaming: boolean;
+  moveFolder: (payload: { id: string; targetParentId: string | null }) => void;
+  isMovingFolder: boolean;
   deleteFolder: (payload: { id: string; recursive?: boolean }) => void;
   isDeleting: boolean;
 }
@@ -54,11 +57,17 @@ export const useFolders = (folderId?: string): UseFoldersReturn => {
       : listRoot,
   });
 
-  const contents = contentData as FolderContents | undefined;
+  const subfolders: FolderDto[] = folderId
+    ? ((contentData as FolderContents | undefined)?.subfolders ?? [])
+    : ((contentData as FolderDto[] | undefined) ?? []);
 
-  const subfolders: FolderDto[] = contents?.subfolders ?? [];
-  const files: FolderFile[] = contents?.files ?? [];
-  const currentFolder: FolderDto | null = contents?.folder ?? null;
+  const files: FolderFile[] = folderId
+    ? ((contentData as FolderContents | undefined)?.files ?? [])
+    : [];
+
+  const currentFolder: FolderDto | null = folderId
+    ? ((contentData as FolderContents | undefined)?.folder ?? null)
+    : null;
 
   const { data: breadcrumbData, isLoading: isBreadcrumbLoading } = useQuery({
     queryKey: folderId ? queryKeys.folders.breadcrumb(folderId) : ['folders', 'breadcrumb-noop'],
@@ -81,6 +90,12 @@ export const useFolders = (folderId?: string): UseFoldersReturn => {
     onSuccess: invalidateContent,
   });
 
+  const { mutate: moveFolder, isPending: isMovingFolder } = useMutation({
+    mutationFn: ({ id, targetParentId }: { id: string; targetParentId: string | null }) =>
+      moveFolderService(id, { targetParentId }),
+    onSuccess: invalidateContent,
+  });
+
   const { mutate: deleteFolder, isPending: isDeleting } = useMutation({
     mutationFn: ({ id, recursive = false }: { id: string; recursive?: boolean }) =>
       deleteFolderService(id, recursive),
@@ -99,6 +114,8 @@ export const useFolders = (folderId?: string): UseFoldersReturn => {
     isCreating,
     renameFolder,
     isRenaming,
+    moveFolder,
+    isMovingFolder,
     deleteFolder,
     isDeleting,
   };

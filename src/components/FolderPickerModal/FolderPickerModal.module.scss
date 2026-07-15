@@ -1,0 +1,123 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.folder-picker {
+  &__nav {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    padding-bottom: $space-3;
+    border-bottom: 1px solid $border-subtle;
+  }
+
+  &__back {
+    @include flex-center;
+    @include focus-ring;
+    gap: $space-1;
+    background: none;
+    border: none;
+    color: $text-secondary;
+    cursor: pointer;
+    font-size: $text-sm;
+    padding: $space-1 $space-2;
+    border-radius: $radius-sm;
+    transition: color $transition-fast, background-color $transition-fast;
+
+    &:hover {
+      color: $text-primary;
+      background-color: $bg-elevated;
+    }
+
+    svg {
+      font-size: $text-base;
+    }
+  }
+
+  &__location {
+    font-size: $text-sm;
+    font-weight: 600;
+    color: $text-primary;
+    @include truncate;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    min-height: 160px;
+    max-height: 300px;
+    overflow-y: auto;
+    gap: $space-1;
+  }
+
+  &__loading {
+    @include flex-center;
+    flex: 1;
+    min-height: 120px;
+  }
+
+  &__empty {
+    @include flex-center;
+    flex: 1;
+    min-height: 120px;
+    color: $text-muted;
+    font-size: $text-sm;
+    margin: 0;
+  }
+
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    padding: $space-2 $space-3;
+    border-radius: $radius-sm;
+    cursor: pointer;
+    border: 1px solid transparent;
+    background: none;
+    width: 100%;
+    text-align: left;
+    transition: background-color $transition-fast, border-color $transition-fast;
+
+    &:hover {
+      background-color: $bg-elevated;
+    }
+
+    &--selected {
+      background-color: $accent-muted;
+      border-color: $accent;
+    }
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    color: $accent;
+    font-size: $text-md;
+    line-height: 0;
+  }
+
+  &__label {
+    flex: 1;
+    font-size: $text-sm;
+    color: $text-primary;
+    @include truncate;
+  }
+
+  &__navigate {
+    @include flex-center;
+    @include focus-ring;
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    color: $text-secondary;
+    cursor: pointer;
+    padding: $space-1;
+    border-radius: $radius-sm;
+    font-size: $text-md;
+    line-height: 0;
+    transition: color $transition-fast, background-color $transition-fast;
+
+    &:hover {
+      color: $text-primary;
+      background-color: $bg-overlay;
+    }
+  }
+}

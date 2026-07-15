@@ -33,5 +33,5 @@ export interface RenameFileDto {
 }
 
 export interface MoveFileDto {
-  targetFolderId: string;
+  targetFolderId: string | null;
 }
