@@ -13,6 +13,7 @@ export const DriveContent = ({
   viewMode,
   onNewFolder,
   onOptions,
+  onPreview,
 }: DriveContentProps): React.JSX.Element => {
   const navigate = useNavigate();
 
@@ -79,6 +80,7 @@ export const DriveContent = ({
                 key={file.id}
                 file={file}
                 onOptions={(id, pos) => onOptions(id, 'file', pos)}
+                onPreview={onPreview ? () => onPreview(file) : undefined}
                 viewMode={viewMode}
               />
             ))}

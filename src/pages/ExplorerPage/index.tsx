@@ -5,6 +5,7 @@ import { Spinner } from '../../components/Spinner';
 import { DriveContent } from '../../components/DriveContent';
 import { CreateFolderModal, DeleteModal, RenameModal } from '../../components/Modal';
 import { FolderPickerModal } from '../../components/FolderPickerModal';
+import { FilePreviewModal } from '../../components/FilePreviewModal';
 import { SharePanel } from '../../components/SharePanel';
 import { ContextMenu } from '../../components/ContextMenu';
 import { useFolders } from '../../hooks/useFolders';
@@ -12,7 +13,7 @@ import { useFiles } from '../../hooks/useFiles';
 import { useUploadQueue } from '../../hooks/useUploadQueue';
 import { UploadPanel } from '../../components/UploadPanel';
 import { useTopbar } from '../../hooks/useTopbar';
-import type { ViewMode } from '../../types/api.types';
+import type { FolderFile, ViewMode } from '../../types/api.types';
 import type { MenuItem } from '../../components/ContextMenu';
 import { BreadcrumbNav } from '../../components/BreadcrumbNav';
 import { ExplorerTopbarActions } from '../../components/ExplorerTopbarActions';
@@ -27,6 +28,7 @@ type ModalState =
   | { type: 'delete-folder'; id: string; name: string }
   | { type: 'delete-file'; id: string; name: string }
   | { type: 'share-file'; id: string; name: string }
+  | { type: 'preview-file'; file: FolderFile }
   | null;
 
 type ContextMenuState = {
@@ -167,6 +169,9 @@ const ExplorerPage = (): React.JSX.Element => {
           viewMode={viewMode}
           onNewFolder={() => setModal({ type: 'create-folder' })}
           onOptions={handleOptions}
+          onPreview={(file) => {
+            if (file.mimeType.startsWith('image/')) setModal({ type: 'preview-file', file });
+          }}
         />
       )}
 
@@ -236,6 +241,15 @@ const ExplorerPage = (): React.JSX.Element => {
         onClose={closeModal}
         fileId={modal?.type === 'share-file' ? modal.id : ''}
         fileName={modal?.type === 'share-file' ? modal.name : ''}
+      />
+
+      <FilePreviewModal
+        isOpen={modal?.type === 'preview-file'}
+        onClose={closeModal}
+        file={modal?.type === 'preview-file' ? modal.file : null}
+        onDownload={() => {
+          if (modal?.type === 'preview-file') downloadFile({ id: modal.file.id, name: modal.file.name });
+        }}
       />
 
       <FolderPickerModal

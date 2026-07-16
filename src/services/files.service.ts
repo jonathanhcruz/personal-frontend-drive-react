@@ -46,6 +46,13 @@ export const downloadFile = async (id: string, name: string): Promise<void> => {
   URL.revokeObjectURL(url);
 };
 
+export const getFileBlob = async (id: string): Promise<Blob> => {
+  const response = await axiosInstance.get<Blob>(`/api/files/${id}/download`, {
+    responseType: 'blob',
+  });
+  return response.data;
+};
+
 export const renameFile = async (id: string, dto: RenameFileDto): Promise<FilePublicDto> => {
   const { data } = await axiosInstance.patch<ApiResponse<FilePublicDto>>(`/api/files/${id}`, dto);
   return data.data;

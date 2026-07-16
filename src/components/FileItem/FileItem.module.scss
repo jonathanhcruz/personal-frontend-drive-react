@@ -22,6 +22,10 @@
     }
   }
 
+  &--previewable {
+    cursor: zoom-in;
+  }
+
   &--list {
     flex-direction: row;
     align-items: center;

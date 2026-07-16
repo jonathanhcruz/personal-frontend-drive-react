@@ -8,4 +8,5 @@ export interface DriveContentProps {
   viewMode: ViewMode;
   onNewFolder: () => void;
   onOptions: (id: string, type: 'folder' | 'file', position: { x: number; y: number }) => void;
+  onPreview?: (file: FolderFile) => void;
 }

@@ -18,7 +18,7 @@ const formatSize = (bytes: number): string => {
 const formatDate = (dateStr: string): string =>
   new Date(dateStr).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
 
-export const FileItem = ({ file, onOptions, viewMode = 'grid' }: FileItemProps): React.JSX.Element => {
+export const FileItem = ({ file, onOptions, onPreview, viewMode = 'grid' }: FileItemProps): React.JSX.Element => {
   const ext = getExtension(file.name);
   const badgeColor = EXTENSION_COLORS[ext] ?? DEFAULT_BADGE_COLOR;
 
@@ -33,9 +33,11 @@ export const FileItem = ({ file, onOptions, viewMode = 'grid' }: FileItemProps):
       className={[
         styles['file-item'],
         viewMode === 'list' ? styles['file-item--list'] : '',
+        onPreview ? styles['file-item--previewable'] : '',
       ]
         .filter(Boolean)
         .join(' ')}
+      onDoubleClick={onPreview}
     >
       <span
         className={styles['file-item__badge']}

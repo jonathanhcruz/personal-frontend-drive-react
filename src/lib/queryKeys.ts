@@ -4,6 +4,9 @@ export const queryKeys = {
     content: (id: string) => ['folders', id] as const,
     breadcrumb: (id: string) => ['folders', id, 'breadcrumb'] as const,
   },
+  files: {
+    blob: (id: string) => ['files', id, 'blob'] as const,
+  },
   shares: {
     list: (fileId: string) => ['shares', fileId] as const,
     all: ['shares', 'all'] as const,
