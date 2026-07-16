@@ -6,6 +6,8 @@ import { Button } from '../Button';
 import { useFileBlob } from '../../hooks/useFileBlob';
 import { PdfViewer } from './PdfViewer';
 import { MediaViewer } from './MediaViewer';
+import { TextViewer } from './TextViewer';
+import { isTextPreviewable } from '../../utils/fileTypes';
 import type { FilePreviewModalProps } from './FilePreviewModal.types';
 import styles from './FilePreviewModal.module.scss';
 
@@ -75,6 +77,10 @@ export const FilePreviewModal = ({
 
           {blobUrl && !error && (file.mimeType.startsWith('video/') || file.mimeType.startsWith('audio/')) && (
             <MediaViewer blobUrl={blobUrl} mimeType={file.mimeType} />
+          )}
+
+          {blobUrl && !error && isTextPreviewable(file.mimeType, file.name) && (
+            <TextViewer blobUrl={blobUrl} />
           )}
         </div>
       </div>

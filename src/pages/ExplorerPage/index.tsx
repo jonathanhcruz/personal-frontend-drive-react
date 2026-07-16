@@ -16,6 +16,7 @@ import { useTopbar } from '../../hooks/useTopbar';
 import type { FolderFile, ViewMode } from '../../types/api.types';
 import type { MenuItem } from '../../components/ContextMenu';
 import { BreadcrumbNav } from '../../components/BreadcrumbNav';
+import { isTextPreviewable } from '../../utils/fileTypes';
 import { ExplorerTopbarActions } from '../../components/ExplorerTopbarActions';
 import styles from './ExplorerPage.module.scss';
 
@@ -174,7 +175,8 @@ const ExplorerPage = (): React.JSX.Element => {
               file.mimeType.startsWith('image/') ||
               file.mimeType === 'application/pdf' ||
               file.mimeType.startsWith('video/') ||
-              file.mimeType.startsWith('audio/')
+              file.mimeType.startsWith('audio/') ||
+              isTextPreviewable(file.mimeType, file.name)
             ) {
               setModal({ type: 'preview-file', file });
             }

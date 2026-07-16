@@ -103,6 +103,25 @@
     font-size: $text-sm;
   }
 
+  &__text-wrap {
+    align-self: stretch;
+    flex: 1;
+    overflow: auto;
+    min-height: 0;
+    width: 100%;
+  }
+
+  &__text {
+    margin: 0;
+    padding: $space-4;
+    font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+    font-size: $text-xs;
+    line-height: 1.6;
+    color: $text-primary;
+    white-space: pre;
+    tab-size: 2;
+  }
+
   &__video {
     max-width: 100%;
     max-height: 100%;

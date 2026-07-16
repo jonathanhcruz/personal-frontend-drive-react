@@ -15,10 +15,12 @@ El contenido se obtiene desde el mismo endpoint de descarga (`GET /api/files/:id
 - Render: `<img src={blobUrl}>`
 - Trigger: click en `FileItem` si `mimeType.startsWith('image/')`
 
-### Fase 2 — Texto y código ⏳
-- Tipos: `text/plain`, `text/csv`, `application/json`, `text/html`, archivos de código (`.ts`, `.js`, `.py`, etc.)
-- Render: fetch como texto + `<pre><code>` con scroll
-- Sin syntax highlighting en esta fase (posible mejora futura)
+### Fase 2 — Texto y código ✅
+- MIME: `text/*`, `application/json`, `application/xml`, `application/yaml`, `application/toml`, `application/sql`
+- Extensiones (fallback): `.dart`, `.env`, `.yaml`, `.yml`, `.toml`, `.md`, `.sh`, `.sql`, `.ini`, `.cfg`, `.ts`, `.tsx`, `.js`, `.jsx`, `.py`, `.go`, `.rs`, `.dart`, y más (ver `src/utils/fileTypes.ts`)
+- Render: `fetch(blobUrl).then(r => r.text())` + `<pre><code>` con scroll horizontal y vertical
+- Sin syntax highlighting (posible mejora futura)
+- Componente: `TextViewer.tsx`
 
 ### Fase 3 — PDF ✅
 - Tipo: `application/pdf`
