@@ -20,13 +20,15 @@ El contenido se obtiene desde el mismo endpoint de descarga (`GET /api/files/:id
 - Render: fetch como texto + `<pre><code>` con scroll
 - Sin syntax highlighting en esta fase (posible mejora futura)
 
-### Fase 3 — PDF ⏳
+### Fase 3 — PDF ✅
 - Tipo: `application/pdf`
-- Render: `<embed src={blobUrl} type="application/pdf">` con fallback a mensaje de descarga si el browser no soporta
+- Render: `pdfjs-dist` v6 — canvas por página, controles prev/next, escala 1.5x
+- Componente: `PdfViewer.tsx`
 
-### Fase 4 — Video y audio ⏳
-- Tipos: `video/mp4`, `video/webm`, `audio/mpeg`, `audio/wav`, etc.
+### Fase 4 — Video y audio ✅
+- Tipos: `video/mp4`, `video/webm`, `video/ogg`, `audio/mpeg`, `audio/wav`, `audio/ogg`, etc.
 - Render: `<video controls>` / `<audio controls>` con blob URL como source
+- Componente: `MediaViewer.tsx`
 
 ### Fase 5 — Fallback ⏳
 - Tipos: todo lo no cubierto por fases anteriores

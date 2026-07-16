@@ -103,6 +103,26 @@
     font-size: $text-sm;
   }
 
+  &__video {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    border-radius: $radius-sm;
+    outline: none;
+  }
+
+  &__audio-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: $space-6 0;
+  }
+
+  &__audio {
+    width: min(480px, 100%);
+  }
+
   &__pdf {
     display: flex;
     flex-direction: column;

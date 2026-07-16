@@ -170,7 +170,12 @@ const ExplorerPage = (): React.JSX.Element => {
           onNewFolder={() => setModal({ type: 'create-folder' })}
           onOptions={handleOptions}
           onPreview={(file) => {
-            if (file.mimeType.startsWith('image/') || file.mimeType === 'application/pdf') {
+            if (
+              file.mimeType.startsWith('image/') ||
+              file.mimeType === 'application/pdf' ||
+              file.mimeType.startsWith('video/') ||
+              file.mimeType.startsWith('audio/')
+            ) {
               setModal({ type: 'preview-file', file });
             }
           }}
