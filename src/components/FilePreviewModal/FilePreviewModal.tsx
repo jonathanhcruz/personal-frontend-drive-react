@@ -4,6 +4,7 @@ import { HiX, HiDownload } from 'react-icons/hi';
 import { Spinner } from '../Spinner';
 import { Button } from '../Button';
 import { useFileBlob } from '../../hooks/useFileBlob';
+import { PdfViewer } from './PdfViewer';
 import type { FilePreviewModalProps } from './FilePreviewModal.types';
 import styles from './FilePreviewModal.module.scss';
 
@@ -59,12 +60,16 @@ export const FilePreviewModal = ({
             </div>
           )}
 
-          {blobUrl && !error && (
+          {blobUrl && !error && file.mimeType.startsWith('image/') && (
             <img
               src={blobUrl}
               alt={file.name}
               className={styles['file-preview__image']}
             />
+          )}
+
+          {blobUrl && !error && file.mimeType === 'application/pdf' && (
+            <PdfViewer blobUrl={blobUrl} />
           )}
         </div>
       </div>

@@ -78,7 +78,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: auto;
+    overflow: hidden;
     padding: $space-4;
     min-height: 0;
     background-color: $bg-base;
@@ -101,5 +101,73 @@
     gap: $space-4;
     color: $text-secondary;
     font-size: $text-sm;
+  }
+
+  &__pdf {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: stretch;
+    width: 100%;
+    gap: $space-3;
+  }
+
+  &__pdf-canvas-wrap {
+    flex: 1;
+    overflow: auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    min-height: 0;
+  }
+
+  &__pdf-canvas {
+    display: block;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+    border-radius: $radius-sm;
+    max-width: 100%;
+  }
+
+  &__pdf-controls {
+    display: flex;
+    align-items: center;
+    gap: $space-4;
+    flex-shrink: 0;
+    padding: $space-2 $space-4;
+    background-color: $bg-elevated;
+    border: 1px solid $border-subtle;
+    border-radius: $radius-full;
+  }
+
+  &__pdf-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: $radius-sm;
+    background: transparent;
+    color: $text-primary;
+    font-size: $text-base;
+    cursor: pointer;
+    transition: background-color $transition-fast;
+
+    &:hover:not(:disabled) {
+      background-color: $bg-overlay;
+    }
+
+    &:disabled {
+      color: $text-muted;
+      cursor: default;
+    }
+  }
+
+  &__pdf-info {
+    font-size: $text-sm;
+    color: $text-secondary;
+    min-width: 56px;
+    text-align: center;
   }
 }
