@@ -64,6 +64,7 @@
   }
 
   &__nav-item {
+    @include no-select;
     display: flex;
     align-items: center;
     gap: $space-3;

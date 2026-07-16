@@ -2,6 +2,7 @@
 @use '../../styles/mixins' as *;
 
 .file-item {
+  @include no-select;
   position: relative;
   display: flex;
   flex-direction: column;

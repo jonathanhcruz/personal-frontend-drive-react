@@ -2,6 +2,7 @@
 @use '../../styles/mixins' as *;
 
 .folder-item {
+  @include no-select;
   position: relative;
   display: flex;
   align-items: center;
