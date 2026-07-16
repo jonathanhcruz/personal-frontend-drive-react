@@ -50,7 +50,7 @@ Ambas rutas usan el mismo componente `ExplorerPage`. La diferencia es si hay `fo
 - Picker de carpeta destino para mover archivos y carpetas
 - Navegación lazy nivel por nivel: `listRoot()` al abrir, `getFolderContents(id)` al navegar
 - `→` navega a subcarpeta con `hasChildren = true`; `← Atrás` sube un nivel
-- "Mi Drive (raíz)" siempre visible como primera opción (destino `null`)
+- "Mi Drive (raíz)" siempre visible como primera opción (destino `null`) — válido tanto para carpetas como para archivos
 - `excludeId` oculta la carpeta siendo movida (cycle prevention)
 - Botón "Mover" habilitado solo tras seleccionar destino
 
@@ -66,10 +66,12 @@ Ambas rutas usan el mismo componente `ExplorerPage`. La diferencia es si hay `fo
 
 ### `useFolderContents(folderId?: string)` — `useQuery`
 ```
-Sin folderId → GET /api/folders          (raíz)
-Con folderId → GET /api/folders/:id      (carpeta)
+Sin folderId → GET /api/folders           (subcarpetas raíz)
+              + GET /api/files/           (archivos raíz, sin folderId)
+Con folderId → GET /api/folders/:id       (subcarpetas + archivos de la carpeta)
 queryKey: ['folder', folderId ?? 'root']
 ```
+En raíz se hacen dos llamadas en paralelo y se combinan: subcarpetas de `/api/folders` y archivos de `/api/files/` (sin query param).
 
 ### `useBreadcrumb(folderId: string)` — `useQuery`
 ```
@@ -131,7 +133,7 @@ getFileMetadata(id: string): Promise<FilePublicDto>
 deleteFile(id: string): Promise<void>
 downloadFile(id: string, name: string): Promise<void>   // Blob download
 renameFile(id: string, dto: RenameFileDto): Promise<FilePublicDto>
-moveFile(id: string, dto: MoveFileDto): Promise<FilePublicDto>   // targetFolderId: null → raíz
+moveFile(id: string, dto: MoveFileDto): Promise<FilePublicDto>   // targetFolderId: uuid | null — null mueve el archivo a raíz
 ```
 
 ---

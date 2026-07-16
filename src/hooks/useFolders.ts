@@ -50,11 +50,12 @@ export const useFolders = (folderId?: string): UseFoldersReturn => {
     ? queryKeys.folders.content(folderId)
     : queryKeys.folders.root;
 
-  const { data: contentData, isLoading, error } = useQuery({
+  const { data: contentData, isLoading, error } = useQuery<FolderContents | FolderDto[]>({
     queryKey: contentKey,
     queryFn: folderId
       ? () => getFolderContents(folderId)
       : listRoot,
+    staleTime: 0,
   });
 
   const subfolders: FolderDto[] = folderId
