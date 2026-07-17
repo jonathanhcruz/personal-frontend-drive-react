@@ -42,3 +42,15 @@ export const moveFolder = async (id: string, dto: MoveFolderDto): Promise<Folder
 export const deleteFolder = async (id: string, recursive = false): Promise<void> => {
   await axiosInstance.delete(`/api/folders/${id}`, { params: { recursive } });
 };
+
+export const downloadFolder = async (id: string, name: string): Promise<void> => {
+  const response = await axiosInstance.get<Blob>(`/api/folders/${id}/download`, {
+    responseType: 'blob',
+  });
+  const url = URL.createObjectURL(response.data);
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = `${name}.zip`;
+  anchor.click();
+  URL.revokeObjectURL(url);
+};

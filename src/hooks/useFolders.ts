@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   createFolder as createFolderService,
   deleteFolder as deleteFolderService,
+  downloadFolder as downloadFolderService,
   getBreadcrumb,
   getFolderContents,
   listRoot,
@@ -39,6 +40,7 @@ interface FolderMutations {
   isMovingFolder: boolean;
   deleteFolder: (payload: { id: string; recursive?: boolean }) => void;
   isDeleting: boolean;
+  downloadFolder: (payload: { id: string; name: string }) => void;
 }
 
 export type UseFoldersReturn = FolderState & BreadcrumbState & FolderMutations;
@@ -103,6 +105,11 @@ export const useFolders = (folderId?: string): UseFoldersReturn => {
     onSuccess: invalidateContent,
   });
 
+  const { mutate: downloadFolder } = useMutation({
+    mutationFn: ({ id, name }: { id: string; name: string }) =>
+      downloadFolderService(id, name),
+  });
+
   return {
     currentFolder,
     subfolders,
@@ -119,5 +126,6 @@ export const useFolders = (folderId?: string): UseFoldersReturn => {
     isMovingFolder,
     deleteFolder,
     isDeleting,
+    downloadFolder,
   };
 };

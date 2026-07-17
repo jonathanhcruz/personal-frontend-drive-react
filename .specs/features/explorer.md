@@ -34,7 +34,7 @@ Ambas rutas usan el mismo componente `ExplorerPage`. La diferencia es si hay `fo
 ### `FolderItem`
 - Representa una carpeta en la grilla
 - Click → navega a `/drive/:id`
-- Menú contextual: Renombrar | Mover a... | Eliminar
+- Menú contextual: Renombrar | Mover a... | Descargar | Eliminar
 - Sin selección de texto (`@include no-select`)
 
 ### `FileItem`
@@ -129,6 +129,7 @@ createFolder(dto: CreateFolderDto): Promise<FolderDto>
 renameFolder(id: string, dto: RenameFolderDto): Promise<FolderDto>
 moveFolder(id: string, dto: MoveFolderDto): Promise<FolderDto>   // targetParentId: null → raíz
 deleteFolder(id: string, recursive?: boolean): Promise<void>
+downloadFolder(id: string, name: string): Promise<void>  // GET /api/folders/:id/download — Blob ZIP
 ```
 
 ### `files.service.ts`
@@ -168,6 +169,7 @@ Click carpeta "Proyectos"
 |---|---|
 | Renombrar | Abre `RenameModal` con el nombre actual |
 | Mover a... | Abre `FolderPickerModal`; carpeta origen excluida con `excludeId` |
+| Descargar | `downloadFolder(id, name)` → Blob ZIP download, sin modal |
 | Eliminar | Confirm dialog → delete recursivo |
 
 ### Archivo
@@ -202,6 +204,7 @@ Click carpeta "Proyectos"
 | PATCH | `/api/folders/:id` | Renombrar carpeta |
 | PATCH | `/api/folders/:id/move` | Mover carpeta |
 | DELETE | `/api/folders/:id` | Eliminar carpeta |
+| GET | `/api/folders/:id/download` | Descargar carpeta como ZIP |
 | GET | `/api/files/:id` | Metadata (MetadataPanel) |
 | GET | `/api/files/:id/download` | Descarga |
 | PATCH | `/api/files/:id` | Renombrar archivo |

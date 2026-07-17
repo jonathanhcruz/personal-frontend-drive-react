@@ -1,6 +1,6 @@
 # Estado del proyecto
 
-_Última actualización: 2026-07-14 (sesión 5)_
+_Última actualización: 2026-07-16 (sesión 6)_
 
 ## Estructura de carpetas
 
@@ -20,6 +20,7 @@ src/
     FolderPickerModal/  ✅  picker de destino · lazy level-by-level · excludeId · BEM .folder-picker
     Input/              ✅  TextInput · password toggle · size variants · error state
     Logo/               ✅  dot animado · sm/md/lg
+    FilePreviewModal/   ✅  modal preview · ImageViewer · PdfViewer · MediaViewer · TextViewer
     MetadataPanel/      🏗️  scaffold vacío — pendiente implementar
     Modal/              ✅  CreateFolderModal · RenameModal · DeleteModal
     SharePanel/         ✅  modal compartir · useShare interno · copiar token · revocar enlaces
@@ -29,19 +30,20 @@ src/
   hooks/
     useAuth.ts          ✅
     useFiles.ts         ✅  upload · delete · download · renameFile · moveFile
-    useFolders.ts       ✅  root→FolderDto[] / subfolder→FolderContents · create/rename/move/delete
+    useFolders.ts       ✅  root→FolderDto[] / subfolder→FolderContents · create/rename/move/delete/download
+    useFileBlob.ts      ✅  query blob por fileId · staleTime 5min · blobUrl via createObjectURL
     useShare.ts         ✅
     useTopbar.ts        ✅
     useUploadQueue.ts   ✅  cola con progreso · distingue raíz vs. subcarpeta para invalidación
     useSharedFiles.ts   ✅  query listAllShares + mutation revokeShare con invalidación
   pages/
     LoginPage/          ✅
-    ExplorerPage/       ✅  ModalState completo · fileMenu + folderMenu con rename/move
+    ExplorerPage/       ✅  ModalState completo · fileMenu + folderMenu con rename/move/download · preview-file
     SharedPage/         ✅  lista real de shares · copiar enlace · revocar
   services/
     auth.service.ts     ✅
     files.service.ts    ✅  upload · download · delete · renameFile · moveFile + share endpoints
-    folders.service.ts  ✅  listRoot (→FolderDto[]) · getFolderContents · renameFolder · moveFolder · deleteFolder
+    folders.service.ts  ✅  listRoot (→FolderDto[]) · getFolderContents · renameFolder · moveFolder · deleteFolder · downloadFolder (→ZIP Blob)
     share.service.ts    ✅  getPublicDownloadUrl helper
   types/
     api.types/          ✅  login · files · folders · index
@@ -102,12 +104,13 @@ src/
 ### Servicios
 - `src/services/auth.service.ts`
 - `src/services/files.service.ts` — upload · list · getById · download · delete · renameFile · moveFile + share endpoints (listShares · createShare · revokeShare); `uploadFile` acepta `onUploadProgress`
-- `src/services/folders.service.ts` — `listRoot` (→ `FolderDto[]`) · `getFolderContents` · `getBreadcrumb` · `createFolder` · `renameFolder` · `moveFolder` · `deleteFolder`
+- `src/services/folders.service.ts` — `listRoot` (→ `FolderDto[]`) · `getFolderContents` · `getBreadcrumb` · `createFolder` · `renameFolder` · `moveFolder` · `deleteFolder` · `downloadFolder` (ZIP Blob)
 - `src/services/share.service.ts` — `getPublicDownloadUrl(token)` → `${VITE_BACKEND_URL}/api/share/${token}`
 
 ### Hooks
 - `src/hooks/useAuth.ts` — login/logout mutations, token solo en memoria
-- `src/hooks/useFolders.ts` — root devuelve `FolderDto[]`; subfolder devuelve `FolderContents`; derivación de `subfolders/files/currentFolder` separada por `folderId`; mutations: create/rename/move/delete + breadcrumb
+- `src/hooks/useFolders.ts` — root devuelve `FolderDto[]`; subfolder devuelve `FolderContents`; derivación de `subfolders/files/currentFolder` separada por `folderId`; mutations: create/rename/move/delete/download + breadcrumb
+- `src/hooks/useFileBlob.ts` — `useQuery` con `queryKey: ['file-blob', fileId]`; `staleTime: 5min`; retorna `{ blobUrl, isLoading, error }`
 - `src/hooks/useFiles.ts` — mutations: upload/delete/download/renameFile/moveFile; invalida queryKeys.folders al mutar
 - `src/hooks/useShare.ts` — query listShares + mutations createShare/revokeShare; scoped a `fileId`
 - `src/hooks/useTopbar.ts` — inyecta `left`/`right` vía `TopbarContext`; usa `useLayoutEffect`
@@ -149,7 +152,7 @@ src/
 
 ### Componentes globales — ContextMenu
 - `src/components/ContextMenu` — portal · Esc/click fuera · BEM `.context-menu` · variante `danger`
-- **Carpeta:** Renombrar → `rename-folder` · Mover a... → `move-folder` · Eliminar → `delete-folder`
+- **Carpeta:** Renombrar → `rename-folder` · Mover a... → `move-folder` · Descargar → `downloadFolder` (ZIP directo) · Eliminar → `delete-folder`
 - **Archivo:** Renombrar → `rename-file` · Mover a... → `move-file` · Compartir → `share-file` · Descargar → `downloadFile` · Eliminar → `delete-file`
 
 ### Componentes globales — SharePanel ✅
@@ -157,6 +160,24 @@ src/
 - Lista enlaces activos + fecha expiración + botón revocar por enlace
 - Botón "Crear enlace" → muestra URL copiable con feedback "Copiado" 2s
 - `createdUrl` se resetea al cambiar `fileId`
+
+### Componentes globales — FilePreviewModal ✅
+- `src/components/FilePreviewModal` — portal · fondo oscuro · header con nombre + Descargar + cerrar · BEM `.file-preview`
+- `ImageViewer` — `<img>` centrado con `max-width/max-height`
+- `PdfViewer` — `pdfjs-dist` v6 · canvas por página · controles prev/next · escala 1.5x
+- `MediaViewer` — `<video controls>` para `video/*` · `<audio controls>` para `audio/*`
+- `TextViewer` — `fetch(blobUrl).then(r => r.text())` + `<pre><code>` con scroll · fuente monospace
+- `src/utils/fileTypes.ts` — `isTextPreviewable(mimeType, fileName)`: MIME primero, extensión como fallback; soporta `.dart`, `.env`, `.yaml`, `.ts`, `.py`, `.go`, `.rs` y más
+- `src/workers/pdf.worker.ts` — wrapper para Vite (`?worker&url`) que bundlea `pdf.worker.min.mjs` como `.js` (fix MIME type Android Chrome)
+- `src/lib/pdfjs.ts` — `GlobalWorkerOptions.workerSrc` apunta al worker bundleado vía `?worker&url`
+- `vite.config.ts` — `worker: { format: 'es' }` para que Vite emita workers como ES modules
+- Modal responsive: `dvh` en lugar de `vh` · full-screen en mobile (≤640px) · `border-radius: 0` en mobile
+- `no-select` aplicado en: `FolderItem`, `FileItem`, `BreadcrumbNav`, `Sidebar __nav-item`
+
+### Componentes globales — Folder ZIP Download ✅
+- `src/services/folders.service.ts` — `downloadFolder(id, name)` → `GET /api/folders/:id/download` (Blob) → `<a>.click()` → guarda como `<name>.zip`
+- `src/hooks/useFolders.ts` — `downloadFolder` mutation expuesta (sin invalidación de caché)
+- `ExplorerPage` — opción "Descargar" en `folderMenuItems` antes de "Eliminar"; usa `HiDownload`
 
 ### Componentes globales — UploadPanel ✅
 - `src/components/UploadPanel` — overlay fixed bottom-right · BEM `.upload-panel`
@@ -166,16 +187,26 @@ src/
 
 ### Páginas
 - `src/pages/LoginPage/index.tsx`
-- `src/pages/ExplorerPage/index.tsx` — `ModalState`: create-folder · rename-folder · rename-file · move-file · move-folder · delete-folder · delete-file · share-file; `<input multiple>`; `useFiles(folderId)` con param URL
+- `src/pages/ExplorerPage/index.tsx` — `ModalState`: create-folder · rename-folder · rename-file · move-file · move-folder · delete-folder · delete-file · share-file · preview-file; `<input multiple>`; `useFiles(folderId)` con param URL; doble clic en `FileItem` abre preview para imagen/PDF/video/audio/texto
 - `src/pages/SharedPage/index.tsx` — `useSharedFiles`; copiar enlace 2s; revocar; estados vacío y loading
 
 ---
 
 ## Pendiente ⏳
 
+### FilePreviewModal — Fase 5 (Fallback) ⏳
+- Tipos no cubiertos por ningún viewer
+- Render: icono + "Vista previa no disponible para este tipo de archivo" + botón Descargar
+- Componente: `UnsupportedView` dentro de `FilePreviewModal`
+
+### FilePreviewModal — "Vista previa" en ContextMenu de archivo ⏳
+- Actualmente solo accesible vía doble clic en `FileItem`
+- Pendiente: agregar opción "Vista previa" en `fileMenuItems` en `ExplorerPage`
+
 ### MetadataPanel ⏳ (scaffold vacío)
-- Panel lateral o modal con metadatos de archivo/carpeta
-- Campos: nombre, tamaño, fecha creación, tipo MIME, propietario
+- Modal con metadatos del archivo: nombre, tipo MIME, tamaño, fecha de subida, checksum SHA-256
+- Se abre desde "Ver detalles" en el ContextMenu del archivo
+- Endpoint: `GET /api/files/:id` (ya existe en `files.service.ts` como `getFileMetadata`)
 
 ---
 

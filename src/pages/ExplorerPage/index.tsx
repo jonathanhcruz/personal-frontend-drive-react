@@ -60,6 +60,7 @@ const ExplorerPage = (): React.JSX.Element => {
     isMovingFolder,
     deleteFolder,
     isDeleting,
+    downloadFolder,
   } = useFolders(folderId);
 
   const activeFolderId = currentFolder?.id;
@@ -102,6 +103,11 @@ const ExplorerPage = (): React.JSX.Element => {
           label: 'Mover a...',
           icon: <HiSwitchHorizontal />,
           onClick: () => setModal({ type: 'move-folder', id: contextMenu.id }),
+        },
+        {
+          label: 'Descargar',
+          icon: <HiDownload />,
+          onClick: () => downloadFolder({ id: contextMenu.id, name: contextMenu.name }),
         },
         {
           label: 'Eliminar',
