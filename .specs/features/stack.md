@@ -26,6 +26,10 @@
 - `@use '../../styles/variables' as *` — nunca `@import`
 - El nombre del bloque lo define el usuario antes de escribir el SCSS
 
+## Mixins de uso obligatorio
+- `@include no-select` en el bloque raíz de todo componente interactivo que no debe permitir selección de texto: `FileItem`, `FolderItem`, `BreadcrumbNav`, `Sidebar __nav-item`
+- `@include truncate` para nombres de archivo/carpeta que pueden desbordar su contenedor
+
 ## Estructura de archivos por componente
 ```
 ComponentName/

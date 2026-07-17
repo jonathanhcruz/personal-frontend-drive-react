@@ -23,6 +23,7 @@ Ambas rutas usan el mismo componente `ExplorerPage`. La diferencia es si hay `fo
 - Cada item es clickeable → navega a esa carpeta
 - Raíz siempre visible como primer item
 - Datos: `GET /api/folders/:id/breadcrumb`
+- Sin selección de texto (`@include no-select`)
 
 ### `FolderGrid`
 - Grilla de items: subcarpetas + archivos de la carpeta actual
@@ -33,13 +34,16 @@ Ambas rutas usan el mismo componente `ExplorerPage`. La diferencia es si hay `fo
 ### `FolderItem`
 - Representa una carpeta en la grilla
 - Click → navega a `/drive/:id`
-- Menú contextual: Renombrar | Eliminar
+- Menú contextual: Renombrar | Mover a... | Eliminar
+- Sin selección de texto (`@include no-select`)
 
 ### `FileItem`
 - Representa un archivo en la grilla
 - Muestra ícono según mime type, nombre, tamaño formateado
-- Click → nada (preview es futuro)
-- Menú contextual: Descargar | Compartir | Ver detalles | Eliminar
+- Doble click → abre `FilePreviewModal` si el tipo es soportado (imagen, PDF, video, audio, texto/código)
+- Cursor `zoom-in` cuando `onPreview` está disponible (`--previewable` modifier)
+- Menú contextual: Renombrar | Mover a... | Compartir | Descargar | Eliminar
+- Sin selección de texto (`@include no-select`)
 
 ### `ContextMenu`
 - Menú flotante posicionado relativo al item

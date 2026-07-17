@@ -10,10 +10,10 @@ El contenido se obtiene desde el mismo endpoint de descarga (`GET /api/files/:id
 
 ## Fases
 
-### Fase 1 — Imágenes ✅ (en desarrollo)
+### Fase 1 — Imágenes ✅
 - Tipos: `image/png`, `image/jpeg`, `image/gif`, `image/webp`, `image/svg+xml`
 - Render: `<img src={blobUrl}>`
-- Trigger: click en `FileItem` si `mimeType.startsWith('image/')`
+- Trigger: doble clic en `FileItem` si `mimeType.startsWith('image/')`
 
 ### Fase 2 — Texto y código ✅
 - MIME: `text/*`, `application/json`, `application/xml`, `application/yaml`, `application/toml`, `application/sql`
