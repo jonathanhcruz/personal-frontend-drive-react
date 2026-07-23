@@ -1,5 +1,7 @@
 # Feature — Sync con Root Folder Backend
 
+**Estado:** ✅ Implementado
+
 ## Contexto
 
 El backend implementó carpetas raíz explícitas por usuario. El endpoint `GET /api/folders` cambió su response shape. Este spec documenta los ajustes necesarios en el frontend.

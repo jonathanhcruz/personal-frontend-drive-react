@@ -43,7 +43,7 @@ src/
   services/
     auth.service.ts     ✅
     files.service.ts    ✅  upload · download · delete · renameFile · moveFile + share endpoints
-    folders.service.ts  ✅  listRoot (→FolderDto[]) · getFolderContents · renameFolder · moveFolder · deleteFolder · downloadFolder (→ZIP Blob)
+    folders.service.ts  ✅  listRoot (→RootContents {subfolders,files}) · getFolderContents · renameFolder · moveFolder · deleteFolder · downloadFolder (→ZIP Blob)
     share.service.ts    ✅  getPublicDownloadUrl helper
   types/
     api.types/          ✅  login · files · folders · index
@@ -103,18 +103,18 @@ src/
 
 ### Servicios
 - `src/services/auth.service.ts`
-- `src/services/files.service.ts` — upload · list · getById · download · delete · renameFile · moveFile + share endpoints (listShares · createShare · revokeShare); `uploadFile` acepta `onUploadProgress`
-- `src/services/folders.service.ts` — `listRoot` (→ `FolderDto[]`) · `getFolderContents` · `getBreadcrumb` · `createFolder` · `renameFolder` · `moveFolder` · `deleteFolder` · `downloadFolder` (ZIP Blob)
+- `src/services/files.service.ts` — upload · list · getById · download · delete · renameFile · moveFile + share endpoints (listShares · createShare · revokeShare); `uploadFile(folderId?: string | undefined)` acepta `onUploadProgress`; sin `folderId` sube a raíz
+- `src/services/folders.service.ts` — `listRoot` (→ `RootContents { subfolders, files }`) · `getFolderContents` · `getBreadcrumb` · `createFolder` · `renameFolder` · `moveFolder` · `deleteFolder` · `downloadFolder` (ZIP Blob)
 - `src/services/share.service.ts` — `getPublicDownloadUrl(token)` → `${VITE_BACKEND_URL}/api/share/${token}`
 
 ### Hooks
 - `src/hooks/useAuth.ts` — login/logout mutations, token solo en memoria
-- `src/hooks/useFolders.ts` — root devuelve `FolderDto[]`; subfolder devuelve `FolderContents`; derivación de `subfolders/files/currentFolder` separada por `folderId`; mutations: create/rename/move/delete/download + breadcrumb
+- `src/hooks/useFolders.ts` — root devuelve `RootContents { subfolders, files }`; subfolder devuelve `FolderContents`; `subfolders` y `files` derivados sin branch (ambas interfaces comparten los campos); mutations: create/rename/move/delete/download + breadcrumb
 - `src/hooks/useFileBlob.ts` — `useQuery` con `queryKey: ['file-blob', fileId]`; `staleTime: 5min`; retorna `{ blobUrl, isLoading, error }`
 - `src/hooks/useFiles.ts` — mutations: upload/delete/download/renameFile/moveFile; invalida queryKeys.folders al mutar
 - `src/hooks/useShare.ts` — query listShares + mutations createShare/revokeShare; scoped a `fileId`
 - `src/hooks/useTopbar.ts` — inyecta `left`/`right` vía `TopbarContext`; usa `useLayoutEffect`
-- `src/hooks/useUploadQueue.ts` — `enqueue(files, actualFolderId, paramFolderId?)` lanza uploads en paralelo con progreso; invalida query correcta raíz vs. subcarpeta; `clearCompleted()`
+- `src/hooks/useUploadQueue.ts` — `enqueue(files, actualFolderId?: string | undefined, paramFolderId?)` lanza uploads en paralelo con progreso; `actualFolderId` undefined → sube a raíz; invalida query correcta raíz vs. subcarpeta; `clearCompleted()`
 - `src/hooks/useSharedFiles.ts` — `useQuery` sobre `listAllShares()` + `useMutation` revokeShare
 
 ### Componentes base
@@ -190,6 +190,14 @@ src/
 - `src/pages/ExplorerPage/index.tsx` — `ModalState`: create-folder · rename-folder · rename-file · move-file · move-folder · delete-folder · delete-file · share-file · preview-file; `<input multiple>`; `useFiles(folderId)` con param URL; doble clic en `FileItem` abre preview para imagen/PDF/video/audio/texto
 - `src/pages/SharedPage/index.tsx` — `useSharedFiles`; copiar enlace 2s; revocar; estados vacío y loading
 
+### Root Folder Sync ✅
+- `src/services/folders.service.ts` — `listRoot()` retorna `RootContents { subfolders: FolderDto[]; files: FolderFile[] }`; exporta interfaz `RootContents`
+- `src/hooks/useFolders.ts` — query type `FolderContents | RootContents`; derivación de `subfolders` y `files` sin branch por `folderId` (ambas interfaces comparten los campos)
+- `src/components/FolderPickerModal` — query type `RootContents`; acceso a `rootData?.subfolders`
+- `src/services/files.service.ts` — `uploadFile(folderId: string | undefined, ...)`: sin `folderId` → backend resuelve a raíz
+- `src/hooks/useUploadQueue.ts` — `enqueue(files, actualFolderId: string | undefined, ...)`: propaga `undefined` al service
+- `src/pages/ExplorerPage` — guard de upload ya no requiere `activeFolderId`; funciona en raíz y subcarpetas
+
 ---
 
 ## Pendiente ⏳
@@ -211,7 +219,8 @@ src/
 ---
 
 ## Bugs corregidos
-- **`listRoot` API breaking change** — `GET /api/folders` cambió de `FolderContents` a `FolderDto[]`; actualizado tipo en `folders.service.ts`, derivación en `useFolders`, query en `FolderPickerModal`
+- **`listRoot` API breaking change (v1)** — `GET /api/folders` cambió de `FolderContents` a `FolderDto[]`; actualizado tipo en `folders.service.ts`, derivación en `useFolders`, query en `FolderPickerModal`
+- **`listRoot` API breaking change (v2)** — `GET /api/folders` cambió de `FolderDto[]` a `RootContents { subfolders, files }`; `listRoot` retorna `RootContents`; `useFolders` ya no hardcodea `files: []` en raíz; `FolderPickerModal` usa `rootData?.subfolders`; upload sin `folderId` habilitado (`uploadFile` + `enqueue` aceptan `undefined`)
 - **`currentFolder` nulo en raíz** — `useFolders` ignoraba el `folder` del response; ahora unificado
 - **`parentId: null` al crear en raíz** — ExplorerPage deriva `activeFolderId = currentFolder?.id`
 - **DeleteModal no cerraba** — `onDelete` no llamaba `closeModal()`
