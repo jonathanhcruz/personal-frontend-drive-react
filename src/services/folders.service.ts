@@ -5,12 +5,18 @@ import type {
   CreateFolderDto,
   FolderContents,
   FolderDto,
+  FolderFile,
   MoveFolderDto,
   RenameFolderDto,
 } from '../types/api.types';
 
-export const listRoot = async (): Promise<FolderDto[]> => {
-  const { data } = await axiosInstance.get<ApiResponse<FolderDto[]>>('/api/folders');
+export interface RootContents {
+  subfolders: FolderDto[];
+  files: FolderFile[];
+}
+
+export const listRoot = async (): Promise<RootContents> => {
+  const { data } = await axiosInstance.get<ApiResponse<RootContents>>('/api/folders');
   return data.data;
 };
 

@@ -2,7 +2,7 @@ import { axiosInstance } from '../lib/axios';
 import type { ApiResponse, CreatedShareDto, FilePublicDto, MoveFileDto, RenameFileDto, ShareTokenDto, ShareWithFile } from '../types/api.types';
 
 export const uploadFile = async (
-  folderId: string,
+  folderId: string | undefined,
   file: File,
   onUploadProgress?: (percent: number) => void,
 ): Promise<FilePublicDto> => {
@@ -12,7 +12,7 @@ export const uploadFile = async (
     '/api/files/upload',
     form,
     {
-      params: { folderId },
+      params: folderId ? { folderId } : {},
       headers: { 'Content-Type': 'multipart/form-data' },
       onUploadProgress: (e) => {
         if (e.total) onUploadProgress?.(Math.round((e.loaded / e.total) * 100));

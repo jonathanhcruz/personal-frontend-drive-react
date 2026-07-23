@@ -13,7 +13,7 @@ export const useUploadQueue = () => {
   };
 
   const enqueue = useCallback(
-    (files: FileList, actualFolderId: string, paramFolderId?: string): void => {
+    (files: FileList, actualFolderId: string | undefined, paramFolderId?: string): void => {
       const contentKey = paramFolderId
         ? queryKeys.folders.content(paramFolderId)
         : queryKeys.folders.root;

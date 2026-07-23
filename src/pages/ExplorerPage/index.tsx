@@ -71,7 +71,7 @@ const ExplorerPage = (): React.JSX.Element => {
   const handleUpload = (): void => fileInputRef.current?.click();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    if (e.target.files && e.target.files.length > 0 && activeFolderId) {
+    if (e.target.files && e.target.files.length > 0) {
       enqueue(e.target.files, activeFolderId, folderId);
       e.target.value = '';
     }

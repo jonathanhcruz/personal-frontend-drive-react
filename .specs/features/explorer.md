@@ -70,12 +70,11 @@ Ambas rutas usan el mismo componente `ExplorerPage`. La diferencia es si hay `fo
 
 ### `useFolderContents(folderId?: string)` — `useQuery`
 ```
-Sin folderId → GET /api/folders           (subcarpetas raíz)
-              + GET /api/files/           (archivos raíz, sin folderId)
+Sin folderId → GET /api/folders           (subfolders + files raíz en una sola llamada)
 Con folderId → GET /api/folders/:id       (subcarpetas + archivos de la carpeta)
 queryKey: ['folder', folderId ?? 'root']
 ```
-En raíz se hacen dos llamadas en paralelo y se combinan: subcarpetas de `/api/folders` y archivos de `/api/files/` (sin query param).
+En raíz se hace **una sola llamada**: `GET /api/folders` devuelve `{ subfolders, files }` directamente.
 
 ### `useBreadcrumb(folderId: string)` — `useQuery`
 ```
@@ -122,7 +121,7 @@ Solo se activa cuando MetadataPanel está abierto
 
 ### `folders.service.ts`
 ```typescript
-listRoot(): Promise<FolderDto[]>                        // GET /api/folders — array directo
+listRoot(): Promise<{ subfolders: FolderDto[]; files: FolderFile[] }>  // GET /api/folders
 getFolderContents(id: string): Promise<FolderContents>
 getBreadcrumb(id: string): Promise<BreadcrumbItem[]>
 createFolder(dto: CreateFolderDto): Promise<FolderDto>
@@ -197,7 +196,7 @@ Click carpeta "Proyectos"
 
 | Método | Ruta | Cuándo |
 |---|---|---|
-| GET | `/api/folders` | Carga raíz → `FolderDto[]` |
+| GET | `/api/folders` | Carga raíz → `{ subfolders: FolderDto[], files: FolderFile[] }` |
 | GET | `/api/folders/:id` | Carga carpeta → `FolderContents` |
 | GET | `/api/folders/:id/breadcrumb` | Breadcrumb |
 | POST | `/api/folders` | Crear carpeta |

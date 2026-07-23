@@ -4,7 +4,7 @@ import { HiArrowLeft, HiChevronRight, HiFolder } from 'react-icons/hi';
 import { Modal } from '../Modal';
 import { Button } from '../Button';
 import { Spinner } from '../Spinner';
-import { listRoot, getFolderContents } from '../../services/folders.service';
+import { listRoot, getFolderContents, type RootContents } from '../../services/folders.service';
 import type { FolderDto } from '../../types/api.types';
 import type { FolderPickerModalProps } from './FolderPickerModal.types';
 import styles from './FolderPickerModal.module.scss';
@@ -37,7 +37,7 @@ export const FolderPickerModal = ({
     }
   }, [isOpen]);
 
-  const { data: rootData, isLoading: isLoadingRoot } = useQuery<FolderDto[]>({
+  const { data: rootData, isLoading: isLoadingRoot } = useQuery<RootContents>({
     queryKey: ['folder-picker', 'root'],
     queryFn: listRoot,
     enabled: isOpen && currentFolderId === null,
@@ -52,7 +52,7 @@ export const FolderPickerModal = ({
   });
 
   const rawSubfolders: FolderDto[] = (currentFolderId === null
-    ? rootData
+    ? rootData?.subfolders
     : folderData?.subfolders) ?? [];
 
   const subfolders = excludeId

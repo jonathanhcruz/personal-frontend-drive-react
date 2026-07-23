@@ -8,6 +8,7 @@ import {
   listRoot,
   moveFolder as moveFolderService,
   renameFolder as renameFolderService,
+  type RootContents,
 } from '../services/folders.service';
 import type {
   BreadcrumbItem,
@@ -52,7 +53,7 @@ export const useFolders = (folderId?: string): UseFoldersReturn => {
     ? queryKeys.folders.content(folderId)
     : queryKeys.folders.root;
 
-  const { data: contentData, isLoading, error } = useQuery<FolderContents | FolderDto[]>({
+  const { data: contentData, isLoading, error } = useQuery<FolderContents | RootContents>({
     queryKey: contentKey,
     queryFn: folderId
       ? () => getFolderContents(folderId)
@@ -60,13 +61,9 @@ export const useFolders = (folderId?: string): UseFoldersReturn => {
     staleTime: 0,
   });
 
-  const subfolders: FolderDto[] = folderId
-    ? ((contentData as FolderContents | undefined)?.subfolders ?? [])
-    : ((contentData as FolderDto[] | undefined) ?? []);
+  const subfolders: FolderDto[] = (contentData as FolderContents | RootContents | undefined)?.subfolders ?? [];
 
-  const files: FolderFile[] = folderId
-    ? ((contentData as FolderContents | undefined)?.files ?? [])
-    : [];
+  const files: FolderFile[] = (contentData as FolderContents | RootContents | undefined)?.files ?? [];
 
   const currentFolder: FolderDto | null = folderId
     ? ((contentData as FolderContents | undefined)?.folder ?? null)
